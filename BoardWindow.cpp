@@ -16,9 +16,9 @@ BoardWindow::BoardWindow(QWidget *parent)
     int shiftW = (width()-80)/Board::getInstance()->getWidth();
     int shiftH = (height()-150)/Board::getInstance()->getHeight();
 
-    for(int i =0; i<Board::getInstance()->getWidth(); i++) {
+    for(int i =0; i<Board::getInstance()->getHeight(); i++) {
         std::vector <QGraphicsEllipseItem*> rectV;
-        for(int j = 0; j < Board::getInstance()->getHeight(); j++) {
+        for(int j = 0; j < Board::getInstance()->getWidth(); j++) {
 //            QGraphicsRectItem *newRect;
             QGraphicsEllipseItem *newEllipse = scene->addEllipse( i*shiftW, j*shiftH, 60, 60, pen, QBrush(Qt::white) );
 //            newRect = scene->addRect(i*shift, j*shift, shift, shift);
@@ -58,13 +58,13 @@ BoardWindow::BoardWindow(QWidget *parent)
 //    ui->column0Button->setPalette(QPalette(tb, tb, tb, tb, tb, tb, tb, tb, tb)); // Set every color roles to the transparent brush
 
 //    ui->column0Button->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
-    ui->column0Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    ui->column1Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    ui->column2Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    ui->column3Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    ui->column4Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    ui->column5Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
-    ui->column6Button->setStyleSheet("background-color: rgba(255, 255, 255, 0);");
+    ui->column0Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column1Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column2Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column3Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column4Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column5Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column6Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
 
 
 
@@ -81,12 +81,13 @@ BoardWindow::~BoardWindow()
 
 void BoardWindow::refreshWindow() {
 
-        for (int i = 0; i < Board::getInstance()->getHeight(); ++i) {
-            for (int j = 0; j < Board::getInstance()->getWidth(); ++j) {
+        for (int i = 0; i < Board::getInstance()->getHeight(); i++) {
+            for (int j = 0; j < Board::getInstance()->getWidth(); j++) {
+                std::cout <<"Petla, i: "<<i<<" ,j: "<<j<< std::endl;
                 if (Board::getInstance()->getFields()[i][j] == 1) {
-                    qtBoard[i][j]->setBrush(QBrush(Qt::red));
+                    qtBoard[j][i]->setBrush(QBrush(Qt::red));
                 } else if (Board::getInstance()->getFields()[i][j] == 2) {
-                    qtBoard[i][j]->setBrush(QBrush(Qt::blue));
+                    qtBoard[j][i]->setBrush(QBrush(Qt::blue));
                 }
             }
         }
