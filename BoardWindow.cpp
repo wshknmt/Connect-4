@@ -19,45 +19,16 @@ BoardWindow::BoardWindow(QWidget *parent)
     for(int i =0; i<Board::getInstance()->getWidth(); i++) {
         std::vector <QGraphicsEllipseItem*> rectV;
         for(int j = 0; j < Board::getInstance()->getHeight(); j++) {
-//            QGraphicsRectItem *newRect;
             QGraphicsEllipseItem *newEllipse = scene->addEllipse( i*shiftW, j*shiftH, 60, 60, pen, QBrush(Qt::white) );
-//            newRect = scene->addRect(i*shift, j*shift, shift, shift);
-//            FieldType type = Board::getInstance()->getFields()[j][i].getType();
-//            if(type == FieldType::WALL) image.setTextureImage(wall);
-//            else if(type == FieldType::EGG) image.setTextureImage(egg);
-//            else if(type == FieldType::EMPTY) image.setTextureImage(grass);
-//            newRect->setBrush(image);
             rectV.push_back(newEllipse);
         }
         qtBoard.push_back(rectV);
     }
 
-//    Board::getInstance()->setField(0,4,2);
-
     Board::getInstance()->print();
 
-//    Board::getInstance()->dropTokenToColumn(1,1);
-//    Board::getInstance()->dropTokenToColumn(2,2);
-//    Board::getInstance()->dropTokenToColumn(2,1);
-//    Board::getInstance()->dropTokenToColumn(1,2);
-//    Board::getInstance()->dropTokenToColumn(3,1);
-//    Board::getInstance()->dropTokenToColumn(3,2);
-//    Board::getInstance()->dropTokenToColumn(3,1);
-//    Board::getInstance()->dropTokenToColumn(3,2);
-//    Board::getInstance()->dropTokenToColumn(4,1);
-//    Board::getInstance()->dropTokenToColumn(4,2);
-//    Board::getInstance()->dropTokenToColumn(4,1);
-//    Board::getInstance()->dropTokenToColumn(5,2);
-//    int row = Board::getInstance()->dropTokenToColumn(4,1);
-//    Board::getInstance()->print();
-//    if (Board::getInstance()->checkWin(4, row, 1)) {
-//        std::cout <<"Player won!"<< std::endl;
-//    }
 
-//    QBrush tb(Qt::transparent); // Transparent brush, solid pattern
-//    ui->column0Button->setPalette(QPalette(tb, tb, tb, tb, tb, tb, tb, tb, tb)); // Set every color roles to the transparent brush
 
-//    ui->column0Button->setStyleSheet("QPushButton { background-color: rgba(10, 0, 0, 0); }");
     ui->column0Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
     ui->column1Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
     ui->column2Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
@@ -65,13 +36,6 @@ BoardWindow::BoardWindow(QWidget *parent)
     ui->column4Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
     ui->column5Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
     ui->column6Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-
-
-
-//    painter = new QPainter(this);
-//    QRectF rectangle(10.0, 20.0, 80.0, 60.0);
-
-//    painter->drawRect(rectangle);
 }
 
 BoardWindow::~BoardWindow()
@@ -83,7 +47,6 @@ void BoardWindow::refreshWindow() {
 
         for (int i = 0; i < Board::getInstance()->getHeight(); i++) {
             for (int j = 0; j < Board::getInstance()->getWidth(); j++) {
-//                std::cout <<"Petla, i: "<<i<<" ,j: "<<j<< std::endl;
                 if (Board::getInstance()->getFields()[i][j] == 1) {
                     qtBoard[j][i]->setBrush(QBrush(Qt::red));
                 } else if (Board::getInstance()->getFields()[i][j] == 2) {
@@ -93,6 +56,11 @@ void BoardWindow::refreshWindow() {
         }
 }
 
+void BoardWindow::buttonCLicked() {
+        if (Board::getInstance()->checkWin(4, row, 1)) {
+            std::cout <<"Player won!"<< std::endl;
+        }
+}
 
 void BoardWindow::on_column0Button_clicked()
 {
@@ -102,6 +70,7 @@ void BoardWindow::on_column0Button_clicked()
         ui->column0Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
 
 
@@ -113,8 +82,8 @@ void BoardWindow::on_column1Button_clicked()
         ui->column1Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
-
 
 void BoardWindow::on_column2Button_clicked()
 {
@@ -124,8 +93,8 @@ void BoardWindow::on_column2Button_clicked()
         ui->column2Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
-
 
 void BoardWindow::on_column3Button_clicked()
 {
@@ -135,8 +104,8 @@ void BoardWindow::on_column3Button_clicked()
         ui->column3Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
-
 
 void BoardWindow::on_column4Button_clicked()
 {
@@ -146,8 +115,8 @@ void BoardWindow::on_column4Button_clicked()
         ui->column4Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
-
 
 void BoardWindow::on_column5Button_clicked()
 {
@@ -157,8 +126,8 @@ void BoardWindow::on_column5Button_clicked()
         ui->column5Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
-
 
 void BoardWindow::on_column6Button_clicked()
 {
@@ -168,5 +137,5 @@ void BoardWindow::on_column6Button_clicked()
         ui->column6Button->setEnabled(false);
     }
     refreshWindow();
+    buttonCLicked();
 }
-

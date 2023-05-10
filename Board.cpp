@@ -41,7 +41,6 @@ void Board::print() {
     }
     std::cout << std::endl;
     std::cout << std::endl;
-
 }
 
 std::vector <std::vector<int> > Board::getFields() {

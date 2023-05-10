@@ -23,6 +23,7 @@ public:
     BoardWindow(QWidget *parent = nullptr);
     ~BoardWindow();
     void refreshWindow();
+    void buttonCLicked();
 
 private slots:
 
