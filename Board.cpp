@@ -35,7 +35,13 @@ void Board::print() {
         std::cout << std::endl;
     }
     std::cout << std::endl;
+    std::cout <<"Occupancy: "<< std::endl;
+    for (unsigned int j = 0; j < WIDTH; j++) {
+        std::cout << fields[0][j] << " ";
+    }
     std::cout << std::endl;
+    std::cout << std::endl;
+
 }
 
 std::vector <std::vector<int> > Board::getFields() {
