@@ -84,11 +84,23 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
     if (Board::getInstance()->checkWin(columnIndex, Board::getInstance()->getLastDroppedRowInColumn(columnIndex), Board::getInstance()->getPlayerToMove())) {
         std::vector <std::pair<int, int>> winPositions = Board::getInstance()->getWinPositions();
         for (int i = 0; i < winPositions.size(); i++) {
-                qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(Qt::green));
-//                winPositions[0]
+                if (Board::getInstance()->getPlayerToMove() == 1) {
+                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(139,0,0)));
+                    ui->resultLabel->setText("Player 1 won!!!");
+                }
+                else {
+                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,128)));
+                    ui->resultLabel->setText("Player 2 won!!!");
+                }
         }
         std::cout <<"Player won!"<< std::endl;
     }
 
+}
+
+
+void BoardWindow::on_exitButton_clicked()
+{
+    this->close();
 }
 

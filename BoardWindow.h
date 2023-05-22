@@ -29,6 +29,8 @@ public:
 private slots:
     void connectSignalsAndSlotsForColumnButtons();
 
+    void on_exitButton_clicked();
+
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
 

@@ -10,18 +10,25 @@ CONFIG += c++17
 
 SOURCES += \
     Board.cpp \
+    MainMenuWindow.cpp \
     main.cpp \
     BoardWindow.cpp
 
 HEADERS += \
     Board.h \
     BoardWindow.h \
+    MainMenuWindow.h \
     debug.h
 
 FORMS += \
-    BoardWindow.ui
+    BoardWindow.ui \
+    MainMenuWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+RESOURCES +=
