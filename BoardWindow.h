@@ -27,22 +27,8 @@ public:
     void buttonCLicked();
 
 private slots:
-
-//    void on_column0Button_clicked();
-
-//    void on_column6Button_clicked();
-
-//    void on_column1Button_clicked();
-
-//    void on_column2Button_clicked();
-
-//    void on_column3Button_clicked();
-
-//    void on_column4Button_clicked();
-
-//    void on_column5Button_clicked();
-
     void connectSignalsAndSlotsForColumnButtons();
+
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
 

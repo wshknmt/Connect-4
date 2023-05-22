@@ -73,86 +73,22 @@ void BoardWindow::refreshWindow() {
         }
 }
 
-//void BoardWindow::buttonCLicked() {
-//        if (Board::getInstance()->checkWin(4, row, 1)) {
-//            std::cout <<"Player won!"<< std::endl;
-//        }
-//}
-
 void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex)
 {
-    Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->getPlayerToMove());
+    Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->changePlayerToMove());
     Board::getInstance()->print();
     if (!Board::getInstance()->isColumnFree(columnIndex)) {
         columnButton->setEnabled(false);
     }
     refreshWindow();
-//    buttonCLicked();
+    if (Board::getInstance()->checkWin(columnIndex, Board::getInstance()->getLastDroppedRowInColumn(columnIndex), Board::getInstance()->getPlayerToMove())) {
+        std::vector <std::pair<int, int>> winPositions = Board::getInstance()->getWinPositions();
+        for (int i = 0; i < winPositions.size(); i++) {
+                qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(Qt::green));
+//                winPositions[0]
+        }
+        std::cout <<"Player won!"<< std::endl;
+    }
+
 }
 
-
-//void BoardWindow::on_column1Button_clicked()
-//{
-//    Board::getInstance()->dropTokenToColumn(1,Board::getInstance()->getPlayerToMove());
-//    Board::getInstance()->print();
-//    if (!Board::getInstance()->isColumnFree(1)) {
-//        ui->column1Button->setEnabled(false);
-//    }
-//    refreshWindow();
-//    buttonCLicked();
-//}
-
-//void BoardWindow::on_column2Button_clicked()
-//{
-//    Board::getInstance()->dropTokenToColumn(2,Board::getInstance()->getPlayerToMove());
-//    Board::getInstance()->print();
-//    if (!Board::getInstance()->isColumnFree(2)) {
-//        ui->column2Button->setEnabled(false);
-//    }
-//    refreshWindow();
-//    buttonCLicked();
-//}
-
-//void BoardWindow::on_column3Button_clicked()
-//{
-//    Board::getInstance()->dropTokenToColumn(3,Board::getInstance()->getPlayerToMove());
-//    Board::getInstance()->print();
-//    if (!Board::getInstance()->isColumnFree(3)) {
-//        ui->column3Button->setEnabled(false);
-//    }
-//    refreshWindow();
-//    buttonCLicked();
-//}
-
-//void BoardWindow::on_column4Button_clicked()
-//{
-//    Board::getInstance()->dropTokenToColumn(4,Board::getInstance()->getPlayerToMove());
-//    Board::getInstance()->print();
-//    if (!Board::getInstance()->isColumnFree(4)) {
-//        ui->column4Button->setEnabled(false);
-//    }
-//    refreshWindow();
-//    buttonCLicked();
-//}
-
-//void BoardWindow::on_column5Button_clicked()
-//{
-//    Board::getInstance()->dropTokenToColumn(5,Board::getInstance()->getPlayerToMove());
-//    Board::getInstance()->print();
-//    if (!Board::getInstance()->isColumnFree(5)) {
-//        ui->column5Button->setEnabled(false);
-//    }
-//    refreshWindow();
-//    buttonCLicked();
-//}
-
-//void BoardWindow::on_column6Button_clicked()
-//{
-//    Board::getInstance()->dropTokenToColumn(6,Board::getInstance()->getPlayerToMove());
-//    Board::getInstance()->print();
-//    if (!Board::getInstance()->isColumnFree(6)) {
-//        ui->column6Button->setEnabled(false);
-//    }
-//    refreshWindow();
-//    buttonCLicked();
-//}

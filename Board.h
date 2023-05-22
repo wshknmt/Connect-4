@@ -20,6 +20,10 @@ public:
     bool checkWin(int col, int row, int token);
     void checkDirection(int col, int row, int direction, int token);
     int getPlayerToMove();
+    int changePlayerToMove();
+    int getFreeRowInColumn(int col);
+    int getLastDroppedRowInColumn(int col);
+    std::vector <std::pair<int, int>> getWinPositions();
 
 private:
     static constexpr int WIDTH = 7;
@@ -29,6 +33,7 @@ private:
 
     std::vector <std::vector<int> > fields;
     std::vector <int> columnOccupancy;
+    std::vector <std::pair<int, int>> winPositions;
     int winCounter = 0;
     static Board* pInstance;
 };

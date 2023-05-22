@@ -61,9 +61,16 @@ bool Board::isColumnFree(int col) {
     if (fields[0][col] == 0) return true;
     else return false;
 }
+int Board::getFreeRowInColumn(int col) {
+    return HEIGHT - columnOccupancy[col] - 1;
+}
+
+int Board::getLastDroppedRowInColumn(int col) {
+    return HEIGHT - columnOccupancy[col];
+}
 
 int Board::dropTokenToColumn(int col, int token) {
-    int row = HEIGHT - columnOccupancy[col] - 1;
+    int row = getFreeRowInColumn(col);
     fields[row][col] = token;
     columnOccupancy[col]++;
     return row;
@@ -71,6 +78,8 @@ int Board::dropTokenToColumn(int col, int token) {
 
 bool Board::checkWin(int col, int row, int token) {
     for (int i = 0; i < 8; ++i) {
+        winPositions.clear();
+        winPositions.push_back(std::make_pair(col, row));
         winCounter = 1;
         checkDirection(col + directions[i][0], row + directions[i][1], i, token);
         checkDirection(col + directions[(i + 4) % 8][0], row + directions[(i + 4) % 8][1], (i + 4) % 8, token);
@@ -82,12 +91,21 @@ bool Board::checkWin(int col, int row, int token) {
 void Board::checkDirection(int col, int row, int direction, int token) {
     if (col < 0 || row < 0 || col >= WIDTH || row >= HEIGHT) return;
     if (fields[row][col] == token) {
+        winPositions.push_back(std::make_pair(col, row));
         winCounter++;
         checkDirection(col + directions[direction][0], row + directions[direction][1], direction, token);
     }
 }
 
 int Board::getPlayerToMove() {
+    return playerToMove;
+}
+
+int Board::changePlayerToMove() {
     playerToMove = playerToMove % 2 + 1;
     return playerToMove;
 }
+
+std::vector <std::pair<int, int>> Board::getWinPositions() {
+    return winPositions;
+};
