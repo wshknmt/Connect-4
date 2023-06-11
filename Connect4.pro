@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     Board.cpp \
+    Bot.cpp \
     MainMenuWindow.cpp \
     main.cpp \
     BoardWindow.cpp
@@ -17,6 +18,7 @@ SOURCES += \
 HEADERS += \
     Board.h \
     BoardWindow.h \
+    Bot.h \
     MainMenuWindow.h \
     debug.h
 

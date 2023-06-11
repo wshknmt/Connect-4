@@ -75,32 +75,71 @@ void BoardWindow::refreshWindow() {
 
 void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex)
 {
-    Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->changePlayerToMove());
-    Board::getInstance()->print();
+    Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->getPlayerToMove());
     if (!Board::getInstance()->isColumnFree(columnIndex)) {
         columnButton->setEnabled(false);
     }
     refreshWindow();
+    if(checkWinOnBoard(columnIndex))
+        return;
+    Board::getInstance()->changePlayerToMove();
+
+    checkWinOnBoard(Bot::getInstance()->botTurn());
+    refreshWindow();
+    Board::getInstance()->changePlayerToMove();
+    Board::getInstance()->print();
+
+
+
+}
+
+bool BoardWindow::checkWinOnBoard(int columnIndex) {
     if (Board::getInstance()->checkWin(columnIndex, Board::getInstance()->getLastDroppedRowInColumn(columnIndex), Board::getInstance()->getPlayerToMove())) {
         std::vector <std::pair<int, int>> winPositions = Board::getInstance()->getWinPositions();
         for (int i = 0; i < winPositions.size(); i++) {
                 if (Board::getInstance()->getPlayerToMove() == 1) {
                     qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(139,0,0)));
-                    ui->resultLabel->setText("Player 1 won!!!");
+                    if (Board::getInstance()->getBotMode() == 0)
+                        ui->resultLabel->setText("Player 1 won!!!");
+                    else
+                        ui->resultLabel->setText("Player won!!!");
                 }
                 else {
                     qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,128)));
-                    ui->resultLabel->setText("Player 2 won!!!");
+                    if (Board::getInstance()->getBotMode() == 0)
+                        ui->resultLabel->setText("Player 2 won!!!");
+                    else
+                        ui->resultLabel->setText("Computer won!!!");
                 }
         }
-        std::cout <<"Player won!"<< std::endl;
+        disableButtons();
+        return true;
     }
-
+    return false;
 }
 
 
-void BoardWindow::on_exitButton_clicked()
-{
+void BoardWindow::on_exitButton_clicked() {
     this->close();
+}
+
+void BoardWindow::disableButtons() {
+    ui->column0Button->setEnabled(false);
+    ui->column1Button->setEnabled(false);
+    ui->column2Button->setEnabled(false);
+    ui->column3Button->setEnabled(false);
+    ui->column4Button->setEnabled(false);
+    ui->column5Button->setEnabled(false);
+    ui->column6Button->setEnabled(false);
+}
+
+void BoardWindow::resetWindow() {
+    ui->column0Button->setEnabled(true);
+    ui->column1Button->setEnabled(true);
+    ui->column2Button->setEnabled(true);
+    ui->column3Button->setEnabled(true);
+    ui->column4Button->setEnabled(true);
+    ui->column5Button->setEnabled(true);
+    ui->column6Button->setEnabled(true);
 }
 

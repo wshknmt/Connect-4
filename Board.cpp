@@ -101,11 +101,21 @@ int Board::getPlayerToMove() {
     return playerToMove;
 }
 
-int Board::changePlayerToMove() {
+void Board::changePlayerToMove() {
     playerToMove = playerToMove % 2 + 1;
-    return playerToMove;
 }
 
 std::vector <std::pair<int, int>> Board::getWinPositions() {
     return winPositions;
 };
+
+void resetBoard() {
+
+}
+
+void Board::setBotMode(int mode) {
+    botMode = mode;
+}
+int Board::getBotMode() {
+    return botMode;
+}

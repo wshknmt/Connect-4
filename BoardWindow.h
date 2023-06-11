@@ -9,6 +9,7 @@
 #include <QImage>
 #include <QPushButton>
 #include "Board.h"
+#include "Bot.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -25,6 +26,8 @@ public:
     ~BoardWindow();
     void refreshWindow();
     void buttonCLicked();
+    void disableButtons();
+    void resetWindow();
 
 private slots:
     void connectSignalsAndSlotsForColumnButtons();
@@ -33,6 +36,7 @@ private slots:
 
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
+    bool checkWinOnBoard(int columnIndex);
 
     Ui::BoardWindow *ui;
     QGraphicsScene *scene;

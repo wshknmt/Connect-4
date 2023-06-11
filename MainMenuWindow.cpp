@@ -6,7 +6,6 @@ MainMenuWindow::MainMenuWindow(QWidget *parent) :
     ui(new Ui::MainMenuWindow)
 {
     ui->setupUi(this);
-    ui->startButtonPvC->setDisabled(1);
 }
 
 MainMenuWindow::~MainMenuWindow()
@@ -17,6 +16,7 @@ MainMenuWindow::~MainMenuWindow()
 void MainMenuWindow::on_startButtonPvP_clicked()
 {
     BoardWindow *bw = new BoardWindow();
+    Board::getInstance()->setBotMode(0);
     bw->show();
     this->hide();
 }
@@ -25,5 +25,14 @@ void MainMenuWindow::on_startButtonPvP_clicked()
 void MainMenuWindow::on_exitButton_clicked()
 {
     QApplication::quit();
+}
+
+
+void MainMenuWindow::on_startButtonPvCRand_clicked()
+{
+    BoardWindow *bw = new BoardWindow();
+    Board::getInstance()->setBotMode(1);
+    bw->show();
+    this->hide();
 }
 

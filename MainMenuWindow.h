@@ -21,6 +21,8 @@ private slots:
 
     void on_exitButton_clicked();
 
+    void on_startButtonPvCRand_clicked();
+
 private:
     Ui::MainMenuWindow *ui;
 };

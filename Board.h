@@ -20,11 +20,13 @@ public:
     bool checkWin(int col, int row, int token);
     void checkDirection(int col, int row, int direction, int token);
     int getPlayerToMove();
-    int changePlayerToMove();
+    void changePlayerToMove();
     int getFreeRowInColumn(int col);
     int getLastDroppedRowInColumn(int col);
     std::vector <std::pair<int, int>> getWinPositions();
-
+    void resetBoard();
+    void setBotMode(int mode);
+    int getBotMode();
 private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
@@ -36,6 +38,7 @@ private:
     std::vector <std::pair<int, int>> winPositions;
     int winCounter = 0;
     static Board* pInstance;
+    int botMode;
 };
 
 #endif // BOARD_H
