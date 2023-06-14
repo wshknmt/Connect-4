@@ -29,13 +29,13 @@ BoardWindow::BoardWindow(QWidget *parent)
 
     Board::getInstance()->print();
 
-    ui->column0Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-    ui->column1Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-    ui->column2Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-    ui->column3Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-    ui->column4Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-    ui->column5Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
-    ui->column6Button->setStyleSheet("background-color: rgba(1, 255, 255, 50);");
+    ui->column0Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    ui->column1Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    ui->column2Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    ui->column3Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    ui->column4Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    ui->column5Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    ui->column6Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
 }
 
 void BoardWindow::connectSignalsAndSlotsForColumnButtons()
@@ -84,9 +84,11 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         return;
     Board::getInstance()->changePlayerToMove();
 
-    checkWinOnBoard(Bot::getInstance()->botTurn());
-    refreshWindow();
-    Board::getInstance()->changePlayerToMove();
+    if (Board::getInstance()->getBotMode() != 0) {
+        checkWinOnBoard(Bot::getInstance()->botTurn());
+        refreshWindow();
+        Board::getInstance()->changePlayerToMove();
+    }
     Board::getInstance()->print();
 
 
