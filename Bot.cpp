@@ -27,8 +27,10 @@ int Bot::getMove() {
         return getRandomMove();
         break;
     case 2:
+        return getMinMaxMove();
         break;
     }
+    return 999;
 
 }
 
@@ -39,11 +41,16 @@ int Bot::getRandomMove() {
     return distribution(generator);
 }
 
+int Bot::getMinMaxMove() {
+    if (Board::getInstance()->checkDraw() )
+        return 0;
+}
+
 void Bot::wait()
 {
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> distribution(0.25, 3);
+    std::uniform_real_distribution<float> distribution(0.5, 0.6);
     QTime dieTime = QTime::currentTime().addSecs(distribution(generator));
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);

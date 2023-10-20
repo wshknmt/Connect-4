@@ -15,6 +15,7 @@ public:
     void setField(int row, int col, int value);
     int getWidth();
     int getHeight();
+    int getNumOfFields();
     bool isColumnFree(int col);
     int dropTokenToColumn(int col, int token);
     bool checkWin(int col, int row, int token);
@@ -27,11 +28,14 @@ public:
     void resetBoard();
     void setBotMode(int mode);
     int getBotMode();
+    int getMovesCounter();
+    bool checkDraw();
 private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
     int directions[8][2] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};
     int playerToMove = 1;
+    int movesCounter = 0;
 
     std::vector <std::vector<int> > fields;
     std::vector <int> columnOccupancy;

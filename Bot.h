@@ -21,6 +21,7 @@ private:
 
     int getMove();
     int getRandomMove();
+    int getMinMaxMove();
     void wait();
 };
 

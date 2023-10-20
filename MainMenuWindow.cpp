@@ -36,3 +36,12 @@ void MainMenuWindow::on_startButtonPvCRand_clicked()
     this->hide();
 }
 
+
+void MainMenuWindow::on_startButtonPvCMinMax_clicked()
+{
+    BoardWindow *bw = new BoardWindow();
+    Board::getInstance()->setBotMode(2);
+    bw->show();
+    this->hide();
+}
+

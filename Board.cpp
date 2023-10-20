@@ -53,6 +53,10 @@ int Board::getHeight() {
     return HEIGHT;
 }
 
+int Board::getNumOfFields() {
+    return WIDTH * HEIGHT;
+}
+
 void Board::setField(int row, int col, int value) {
     fields[row][col] = value;
 }
@@ -73,6 +77,7 @@ int Board::dropTokenToColumn(int col, int token) {
     int row = getFreeRowInColumn(col);
     fields[row][col] = token;
     columnOccupancy[col]++;
+    movesCounter++;
     return row;
 }
 
@@ -116,6 +121,18 @@ void resetBoard() {
 void Board::setBotMode(int mode) {
     botMode = mode;
 }
+
 int Board::getBotMode() {
     return botMode;
+}
+
+int Board::getMovesCounter() {
+    return movesCounter;
+}
+
+bool Board::checkDraw() {
+    if (getNumOfFields() == movesCounter)
+        return true;
+    else
+        return false;
 }

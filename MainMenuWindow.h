@@ -23,6 +23,8 @@ private slots:
 
     void on_startButtonPvCRand_clicked();
 
+    void on_startButtonPvCMinMax_clicked();
+
 private:
     Ui::MainMenuWindow *ui;
 };
