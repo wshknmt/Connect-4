@@ -37,7 +37,7 @@ void Board::print() {
     std::cout << std::endl;
     std::cout <<"Occupancy: "<< std::endl;
     for (unsigned int j = 0; j < WIDTH; j++) {
-        std::cout << fields[0][j] << " ";
+        std::cout << columnOccupancy[j] << " ";
     }
     std::cout << std::endl;
     std::cout << std::endl;
@@ -79,6 +79,13 @@ int Board::dropTokenToColumn(int col, int token) {
     columnOccupancy[col]++;
     movesCounter++;
     return row;
+}
+
+void Board::removeLastTokenFromColumn(int col) {
+    int row = getLastDroppedRowInColumn(col);
+    fields[row][col] = 0;
+    columnOccupancy[col]--;
+    movesCounter--;
 }
 
 bool Board::checkWin(int col, int row, int token) {

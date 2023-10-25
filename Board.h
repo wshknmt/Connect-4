@@ -18,6 +18,7 @@ public:
     int getNumOfFields();
     bool isColumnFree(int col);
     int dropTokenToColumn(int col, int token);
+    void removeLastTokenFromColumn(int col);
     bool checkWin(int col, int row, int token);
     void checkDirection(int col, int row, int direction, int token);
     int getPlayerToMove();
