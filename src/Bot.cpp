@@ -2,6 +2,8 @@
 
 Bot* Bot::pInstance = nullptr;
 
+int MAX_TEST_COLUMN = 4;
+
 Bot::Bot()
 {
 
@@ -22,24 +24,32 @@ Bot* Bot::getInstance() {
     return pInstance;
 }
 
-void Bot::setMode(int mode) {
-    this->mode = mode;
+void Bot::setMode(int new_mode) {
+    mode = new_mode;
 }
 
 int Bot::getMode() {
     return mode;
 }
 
+void Bot::play(int column) {
+    Board::getInstance()->dropTokenToColumn(column, Board::getInstance()->getPlayerToMove());
+    Board::getInstance()->changePlayerToMove();
+}
+void Bot::undoPlay(int column) {
+    Board::getInstance()->changePlayerToMove();
+    Board::getInstance()->removeLastTokenFromColumn(column);
+}
+
 int Bot::getMove() {
-    std::cout<<"mode: "<<getMode()<<std::endl<<std::endl;
+    // std::cout<<"mode: "<<getMode()<<std::endl<<std::endl;
     switch(getMode()) {
     case 1:
         return getRandomMove();
         break;
     case 2:
-        std::cout<<"wszedl: "<<std::endl;
         return getMinMaxMove( -Board::getInstance()->getNumOfFields() / 2, Board::getInstance()->getNumOfFields() / 2);
-//        return getMinMaxMove( -1, 1);
+        // return getMinMaxMove( -1, 1);
         break;
     default:
         return 999;
@@ -59,78 +69,64 @@ int Bot::getRandomMove() {
 }
 
 int Bot::getMinMaxMove(int alpha, int beta) {
-//    std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
-//    std::cout<<"getMinMaxMove"<<std::endl;
-    for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
+
+    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+    // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove()))
             return i;
     }
 
-//    int max = (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
-//    if (beta > max) {
-//        beta = max;
-//        if (alpha >= beta) return beta;
-//    }
-//    int bestScore = -Board::getInstance()->getNumOfFields();
     int columnOfBestScore = -1;
 
-    for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
+    // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
+    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
         if ( Board::getInstance()->isColumnFree(i) ) {
-            Board::getInstance()->dropTokenToColumn(i, Board::getInstance()->getPlayerToMove());
-            Board::getInstance()->changePlayerToMove();
+            play(i);
             int newScore = -getMinMaxScore(-beta, -alpha);
-            if ( newScore >= beta) {
-                Board::getInstance()->changePlayerToMove();
-                Board::getInstance()->removeLastTokenFromColumn(i);
-                return i;
-            }
             if ( newScore > alpha) {
                 alpha = newScore;
                 columnOfBestScore = i;
             }
-            Board::getInstance()->changePlayerToMove();
-            Board::getInstance()->removeLastTokenFromColumn(i);
+            undoPlay(i);
+
+            std::cout<<"column: "<<i<<", score: "<<newScore<<std::endl;
+            std::cout<<"checked: "<<100.0*(i+1)/MAX_TEST_COLUMN<<" % column"<<std::endl;
         }
+            
     }
     return columnOfBestScore;
 }
 
 int Bot::getMinMaxScore(int alpha, int beta) {
-    std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
-//    std::cout<<"getMinMaxScore"<<std::endl;
+    if (Board::getInstance()->getAllMovesCounter() % 1000000 == 0) 
+        std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
     if (Board::getInstance()->checkDraw() )
         return 0;
-    for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
+
+    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+    // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove()))
             return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
     }
 
     int max = (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
     if (beta > max) {
-//        std::cout<<"beta > max"<<std::endl;
         beta = max;
         if (alpha >= beta) return beta;
     }
-//    int bestScore = -Board::getInstance()->getNumOfFields();
 
-    for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
+    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+    //for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if ( Board::getInstance()->isColumnFree(i) ) {
-            Board::getInstance()->dropTokenToColumn(i, Board::getInstance()->getPlayerToMove());
-            Board::getInstance()->changePlayerToMove();
+            play(i);
             int newScore = -getMinMaxScore(-beta, -alpha);
             if ( newScore >= beta) {
-//                std::cout<<"newScore >= beta"<<std::endl;
-                Board::getInstance()->changePlayerToMove();
-                Board::getInstance()->removeLastTokenFromColumn(i);
+                undoPlay(i);
                 return newScore;
             }
-            if ( newScore > alpha) {
-//                std::cout<<"newScore > alpha"<<std::endl;
-                alpha = newScore;
-            }
-
-            Board::getInstance()->changePlayerToMove();
-            Board::getInstance()->removeLastTokenFromColumn(i);
+            if ( newScore > alpha) alpha = newScore;
+            
+            undoPlay(i);
         }
     }
     return alpha;

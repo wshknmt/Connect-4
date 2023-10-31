@@ -54,7 +54,9 @@ int Board::getHeight() {
 }
 
 int Board::getNumOfFields() {
-    return WIDTH * HEIGHT;
+    int MAX_TEST_COLUMN = 4;
+    return MAX_TEST_COLUMN * HEIGHT;
+    // return WIDTH * HEIGHT;
 }
 
 void Board::setField(int row, int col, int value) {

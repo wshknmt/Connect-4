@@ -28,14 +28,14 @@ BoardWindow::BoardWindow(QWidget *parent)
     }
 
     Board::getInstance()->print();
-
-    ui->column0Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
-    ui->column1Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
-    ui->column2Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
-    ui->column3Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
-    ui->column4Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
-    ui->column5Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
-    ui->column6Button->setStyleSheet("background-color: rgba(1, 255, 255, 0);");
+    
+    ui->column0Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    ui->column1Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    ui->column2Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    ui->column3Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    ui->column4Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    ui->column5Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    ui->column6Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
 }
 
 void BoardWindow::connectSignalsAndSlotsForColumnButtons()

@@ -22,6 +22,8 @@ public:
     int getMode();
     void wait();
     void resetBot();
+    void play(int column);
+    void undoPlay(int column);
 
 private:
     static Bot* pInstance;
