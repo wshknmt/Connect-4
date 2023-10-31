@@ -34,9 +34,12 @@ private slots:
 
     void on_exitButton_clicked();
 
+    void on_newGameButton_clicked();
+
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
     bool checkWinOnBoard(int columnIndex);
+    bool checkDrawOnBoard();
 
     Ui::BoardWindow *ui;
     QGraphicsScene *scene;

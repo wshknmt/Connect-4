@@ -14,15 +14,18 @@ public:
     static Bot* getInstance();
     Bot();
     int botTurn();
+    int getMove();
+    int getRandomMove();
+    int getMinMaxMove(int alpha, int beta);
+    int getMinMaxScore(int alpha, int beta);
+    void setMode(int mode);
+    int getMode();
+    void wait();
+    void resetBot();
 
 private:
     static Bot* pInstance;
     int mode;
-
-    int getMove();
-    int getRandomMove();
-    int getMinMaxMove();
-    void wait();
 };
 
 #endif // BOT_H

@@ -16,7 +16,7 @@ MainMenuWindow::~MainMenuWindow()
 void MainMenuWindow::on_startButtonPvP_clicked()
 {
     BoardWindow *bw = new BoardWindow();
-    Board::getInstance()->setBotMode(0);
+    Bot::getInstance()->setMode(0);
     bw->show();
     this->hide();
 }
@@ -31,7 +31,7 @@ void MainMenuWindow::on_exitButton_clicked()
 void MainMenuWindow::on_startButtonPvCRand_clicked()
 {
     BoardWindow *bw = new BoardWindow();
-    Board::getInstance()->setBotMode(1);
+    Bot::getInstance()->setMode(1);
     bw->show();
     this->hide();
 }
@@ -40,7 +40,7 @@ void MainMenuWindow::on_startButtonPvCRand_clicked()
 void MainMenuWindow::on_startButtonPvCMinMax_clicked()
 {
     BoardWindow *bw = new BoardWindow();
-    Board::getInstance()->setBotMode(2);
+    Bot::getInstance()->setMode(2);
     bw->show();
     this->hide();
 }

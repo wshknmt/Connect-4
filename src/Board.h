@@ -27,9 +27,8 @@ public:
     int getLastDroppedRowInColumn(int col);
     std::vector <std::pair<int, int>> getWinPositions();
     void resetBoard();
-    void setBotMode(int mode);
-    int getBotMode();
     int getMovesCounter();
+    int getAllMovesCounter();
     bool checkDraw();
 private:
     static constexpr int WIDTH = 7;
@@ -37,13 +36,14 @@ private:
     int directions[8][2] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};
     int playerToMove = 1;
     int movesCounter = 0;
+    int allMovesCounter = 0;
 
     std::vector <std::vector<int> > fields;
     std::vector <int> columnOccupancy;
     std::vector <std::pair<int, int>> winPositions;
     int winCounter = 0;
     static Board* pInstance;
-    int botMode;
+
 };
 
 #endif // BOARD_H

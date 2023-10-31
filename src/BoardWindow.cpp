@@ -68,6 +68,8 @@ void BoardWindow::refreshWindow() {
                     qtBoard[j][i]->setBrush(QBrush(Qt::red));
                 } else if (Board::getInstance()->getFields()[i][j] == 2) {
                     qtBoard[j][i]->setBrush(QBrush(Qt::blue));
+                } else if (Board::getInstance()->getFields()[i][j] == 0) {
+                    qtBoard[j][i]->setBrush(QBrush(Qt::NoBrush));
                 }
             }
         }
@@ -80,18 +82,21 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         columnButton->setEnabled(false);
     }
     refreshWindow();
-    if(checkWinOnBoard(columnIndex))
+    if(checkWinOnBoard(columnIndex) || checkDrawOnBoard())
         return;
     Board::getInstance()->changePlayerToMove();
 
-    if (Board::getInstance()->getBotMode() != 0) {
-        checkWinOnBoard(Bot::getInstance()->botTurn());
+    if (Bot::getInstance()->getMode() != 0) {
+        int botMove = Bot::getInstance()->botTurn();
+        checkWinOnBoard(botMove);
+        checkDrawOnBoard();
+        if (!Board::getInstance()->isColumnFree(botMove)) {
+                columnButton->setEnabled(false);
+        }
         refreshWindow();
         Board::getInstance()->changePlayerToMove();
     }
     Board::getInstance()->print();
-
-
 
 }
 
@@ -101,20 +106,28 @@ bool BoardWindow::checkWinOnBoard(int columnIndex) {
         for (int i = 0; i < winPositions.size(); i++) {
                 if (Board::getInstance()->getPlayerToMove() == 1) {
                     qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(139,0,0)));
-                    if (Board::getInstance()->getBotMode() == 0)
+                    if (Bot::getInstance()->getMode() == 0)
                         ui->resultLabel->setText("Player 1 won!!!");
                     else
                         ui->resultLabel->setText("Player won!!!");
                 }
                 else {
-                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,128)));
-                    if (Board::getInstance()->getBotMode() == 0)
+                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,50)));
+                    if (Bot::getInstance()->getMode() == 0)
                         ui->resultLabel->setText("Player 2 won!!!");
                     else
                         ui->resultLabel->setText("Computer won!!!");
                 }
         }
         disableButtons();
+        return true;
+    }
+    return false;
+}
+
+bool BoardWindow::checkDrawOnBoard() {
+    if (Board::getInstance()->checkDraw()) {
+        ui->resultLabel->setText("Draw!!!");
         return true;
     }
     return false;
@@ -136,6 +149,8 @@ void BoardWindow::disableButtons() {
 }
 
 void BoardWindow::resetWindow() {
+    Board::getInstance()->resetBoard();
+//    Bot::getInstance()->resetBot();
     ui->column0Button->setEnabled(true);
     ui->column1Button->setEnabled(true);
     ui->column2Button->setEnabled(true);
@@ -143,5 +158,13 @@ void BoardWindow::resetWindow() {
     ui->column4Button->setEnabled(true);
     ui->column5Button->setEnabled(true);
     ui->column6Button->setEnabled(true);
+    ui->resultLabel->setText("");
+}
+
+
+void BoardWindow::on_newGameButton_clicked()
+{
+    resetWindow();
+    refreshWindow();
 }
 

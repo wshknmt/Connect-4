@@ -78,6 +78,7 @@ int Board::dropTokenToColumn(int col, int token) {
     fields[row][col] = token;
     columnOccupancy[col]++;
     movesCounter++;
+    allMovesCounter++;
     return row;
 }
 
@@ -121,20 +122,26 @@ std::vector <std::pair<int, int>> Board::getWinPositions() {
     return winPositions;
 };
 
-void resetBoard() {
+void Board::resetBoard() {
+    for (unsigned int i = 0; i < HEIGHT; i++)
+        for (unsigned int j = 0; j < WIDTH; j++)
+            fields[i][j] = 0;
 
-}
-
-void Board::setBotMode(int mode) {
-    botMode = mode;
-}
-
-int Board::getBotMode() {
-    return botMode;
+    for (unsigned int j = 0; j < WIDTH; j++) {
+        columnOccupancy[j] = 0;
+    }
+    movesCounter = 0;
+    allMovesCounter = 0;
+    winPositions.clear();
+    playerToMove = 1;
 }
 
 int Board::getMovesCounter() {
     return movesCounter;
+}
+
+int Board::getAllMovesCounter() {
+    return allMovesCounter;
 }
 
 bool Board::checkDraw() {
