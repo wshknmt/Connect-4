@@ -50,7 +50,8 @@ class Connect4Conan(ConanFile):
         cmake.build()
 
     def imports(self):
-        self.copy("Qt6Widgetsd.dll", dst="lib", src="bin", keep_path=False)
-        self.copy("Qt6Cored.dll", dst="lib", src="bin", keep_path=False)
-        self.copy("Qt6Guid.dll", dst="lib", src="bin", keep_path=False)
-        self.copy("res/archdatadir/plugins/platforms/qwindowsd.dll", dst="lib/platforms", src="", keep_path=False)
+        if self.settings.os == "Windows":
+            self.copy("Qt6Widgets*.dll", dst="bin", src="bin", keep_path=False)
+            self.copy("Qt6Core*.dll", dst="bin", src="bin", keep_path=False)
+            self.copy("Qt6Gui*.dll", dst="bin", src="bin", keep_path=False)
+            self.copy("res/archdatadir/plugins/platforms/qwindows*.dll", dst="bin/platforms", src="", keep_path=False)

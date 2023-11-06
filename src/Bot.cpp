@@ -91,6 +91,7 @@ int Bot::getMinMaxMove(int alpha, int beta) {
 
             std::cout<<"column: "<<i<<", score: "<<newScore<<std::endl;
             std::cout<<"checked: "<<100.0*(i+1)/MAX_TEST_COLUMN<<" % column"<<std::endl;
+            std::cout<<"recursiveLevel: "<<recursiveLevel<<std::endl;
         }
             
     }
@@ -98,21 +99,36 @@ int Bot::getMinMaxMove(int alpha, int beta) {
 }
 
 int Bot::getMinMaxScore(int alpha, int beta) {
+    recursiveLevel++;
+    // int x = Board::getInstance()->getNumOfFields();
+    // if (recursiveLevel >= x/4.0) {
+    //     recursiveLevel--;
+    //     return alpha;
+    // }
     if (Board::getInstance()->getAllMovesCounter() % 1000000 == 0) 
         std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
-    if (Board::getInstance()->checkDraw() )
+    if (Board::getInstance()->checkDraw() ) {
+        recursiveLevel--;
         return 0;
+    }
+        
 
     for (int i = 0; i < MAX_TEST_COLUMN; i++) {
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-        if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove()))
-            return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
+        if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove())) {
+            recursiveLevel--;
+            return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 4;
+        }
+            
     }
 
     int max = (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
     if (beta > max) {
         beta = max;
-        if (alpha >= beta) return beta;
+        if (alpha >= beta) {
+            recursiveLevel--;
+            return beta;
+        } 
     }
 
     for (int i = 0; i < MAX_TEST_COLUMN; i++) {
@@ -122,6 +138,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
             int newScore = -getMinMaxScore(-beta, -alpha);
             if ( newScore >= beta) {
                 undoPlay(i);
+                recursiveLevel--;
                 return newScore;
             }
             if ( newScore > alpha) alpha = newScore;
@@ -129,6 +146,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
             undoPlay(i);
         }
     }
+    recursiveLevel--;
     return alpha;
 }
 

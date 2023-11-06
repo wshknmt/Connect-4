@@ -29,6 +29,8 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL
 	)
 endif()
 
+target_compile_definitions(${PROJECT_NAME} PUBLIC QT_DISABLE_DEPRECATED_BEFORE=0x060000)
+
 find_package(Threads)
 find_package(Qt6)
 
@@ -38,3 +40,9 @@ target_link_libraries(${PROJECT_NAME}
 	${CMAKE_DL_LIBS}
 )
 
+if(WIN32)
+  set(DEPENDENCIES "${CMAKE_BINARY_DIR}/bin")
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${DEPENDENCIES}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/."
+  )
+endif()

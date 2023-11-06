@@ -28,6 +28,7 @@ public:
 private:
     static Bot* pInstance;
     int mode;
+    int recursiveLevel = 0;
 };
 
 #endif // BOT_H

@@ -23,8 +23,8 @@ HEADERS += \
     debug.h
 
 FORMS += \
-    BoardWindow.ui \
-    MainMenuWindow.ui
+    forms/BoardWindow.ui \
+    forms/MainMenuWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
