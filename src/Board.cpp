@@ -54,7 +54,6 @@ int Board::getHeight() {
 }
 
 int Board::getNumOfFields() {
-    int MAX_TEST_COLUMN = 4;
     return MAX_TEST_COLUMN * HEIGHT;
     // return WIDTH * HEIGHT;
 }
@@ -81,6 +80,7 @@ int Board::dropTokenToColumn(int col, int token) {
     columnOccupancy[col]++;
     movesCounter++;
     allMovesCounter++;
+    lastColumn = col;
     return row;
 }
 
@@ -151,4 +151,51 @@ bool Board::checkDraw() {
         return true;
     else
         return false;
+}
+
+int Board::getLastColumn() {
+    return lastColumn;
+}
+
+PairInt64 Board::hashCurrentPosition() {
+    uint64_t boardColor = 0; // 1 - red, 0 - blue
+    uint64_t boardOccupancy = 0; // 1 - occupied position, 0 - empty position
+
+    for (unsigned int i = 0; i < HEIGHT; i++) {
+        for (unsigned int j = 0; j < MAX_TEST_COLUMN; j++) {
+        // for (unsigned int j = 0; j < WIDTH; j++) {
+            if (fields[i][j] == 1) {
+                boardOccupancy |= (1ULL << (i * 7 + j) );
+                boardColor     |= (1ULL << (i * 7 + j) );
+            } else if (fields[i][j] == 2) {
+                boardOccupancy |= (1ULL << (i * 7 + j) );
+            }
+        }
+    }
+
+    PairInt64 pair;
+    pair.boardColor = boardColor;
+    pair.boardOccupancy = boardOccupancy;
+
+    return pair;
+}
+
+void Board::addHashToMap(PairInt64 index, int ScoreValue) {
+    transpositionTable.insert({index, ScoreValue});
+}
+bool Board::checkHashInMap(PairInt64 index) {
+
+    auto it = transpositionTable.find(index);
+    if (it != transpositionTable.end())
+        return true;
+    return false;
+
+}
+int Board::getScoreFromMap(PairInt64 index) {
+
+    auto it = transpositionTable.find(index);
+    if (it != transpositionTable.end())
+        return it->second;
+    return 99999;
+
 }

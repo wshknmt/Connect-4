@@ -28,7 +28,7 @@ BoardWindow::BoardWindow(QWidget *parent)
     }
 
     Board::getInstance()->print();
-    
+
     ui->column0Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     ui->column1Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     ui->column2Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
@@ -97,6 +97,7 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         Board::getInstance()->changePlayerToMove();
     }
     Board::getInstance()->print();
+    ui->undoButton->setEnabled(true);
 
 }
 
@@ -165,6 +166,15 @@ void BoardWindow::resetWindow() {
 void BoardWindow::on_newGameButton_clicked()
 {
     resetWindow();
+    refreshWindow();
+}
+
+
+void BoardWindow::on_undoButton_clicked()
+{
+    Board::getInstance()->changePlayerToMove();
+    Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->getLastColumn());
+    ui->undoButton->setEnabled(false);
     refreshWindow();
 }
 

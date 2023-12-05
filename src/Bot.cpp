@@ -2,8 +2,6 @@
 
 Bot* Bot::pInstance = nullptr;
 
-int MAX_TEST_COLUMN = 4;
-
 Bot::Bot()
 {
 
@@ -70,7 +68,7 @@ int Bot::getRandomMove() {
 
 int Bot::getMinMaxMove(int alpha, int beta) {
 
-    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove()))
             return i;
@@ -79,7 +77,7 @@ int Bot::getMinMaxMove(int alpha, int beta) {
     int columnOfBestScore = -1;
 
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
         if ( Board::getInstance()->isColumnFree(i) ) {
             play(i);
             int newScore = -getMinMaxScore(-beta, -alpha);
@@ -90,36 +88,43 @@ int Bot::getMinMaxMove(int alpha, int beta) {
             undoPlay(i);
 
             std::cout<<"column: "<<i<<", score: "<<newScore<<std::endl;
-            std::cout<<"checked: "<<100.0*(i+1)/MAX_TEST_COLUMN<<" % column"<<std::endl;
+            std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
             std::cout<<"recursiveLevel: "<<recursiveLevel<<std::endl;
         }
-            
+
     }
     return columnOfBestScore;
 }
 
 int Bot::getMinMaxScore(int alpha, int beta) {
+    if (Board::getInstance()->getMovesCounter() <= 30) {
+        PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+        int score = Board::getInstance()->getScoreFromMap(curHash);
+        if ( score != 99999) {
+            return score;
+        }
+    }
     recursiveLevel++;
     // int x = Board::getInstance()->getNumOfFields();
     // if (recursiveLevel >= x/4.0) {
     //     recursiveLevel--;
     //     return alpha;
     // }
-    if (Board::getInstance()->getAllMovesCounter() % 1000000 == 0) 
+    if (Board::getInstance()->getAllMovesCounter() % 1000000 == 0)
         std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
     if (Board::getInstance()->checkDraw() ) {
         recursiveLevel--;
         return 0;
     }
-        
 
-    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove())) {
             recursiveLevel--;
-            return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 4;
+            return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
         }
-            
+
     }
 
     int max = (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
@@ -128,23 +133,42 @@ int Bot::getMinMaxScore(int alpha, int beta) {
         if (alpha >= beta) {
             recursiveLevel--;
             return beta;
-        } 
+        }
     }
 
-    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     //for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if ( Board::getInstance()->isColumnFree(i) ) {
             play(i);
+            if (Board::getInstance()->getMovesCounter() <= 30) {
+                PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+                int score = Board::getInstance()->getScoreFromMap(curHash);
+                if ( score != 99999) {
+                    undoPlay(i);
+                    recursiveLevel--;
+                    return score;
+                }
+            }
             int newScore = -getMinMaxScore(-beta, -alpha);
             if ( newScore >= beta) {
+                if (Board::getInstance()->getMovesCounter() <= 30) {
+                    PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+                    if (!Board::getInstance()->checkHashInMap(curHash))
+                        Board::getInstance()->addHashToMap(curHash, newScore);
+                }
                 undoPlay(i);
                 recursiveLevel--;
                 return newScore;
             }
             if ( newScore > alpha) alpha = newScore;
-            
+
             undoPlay(i);
         }
+    }
+    if (Board::getInstance()->getMovesCounter() <= 30) {
+        PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+        if (!Board::getInstance()->checkHashInMap(curHash))
+            Board::getInstance()->addHashToMap(curHash, alpha);
     }
     recursiveLevel--;
     return alpha;
@@ -153,7 +177,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
 void Bot::wait() {
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_real_distribution<float> distribution(0.5, 0.6);
+    std::uniform_real_distribution<double> distribution(0.5, 0.6);
     QTime dieTime = QTime::currentTime().addSecs(distribution(generator));
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);

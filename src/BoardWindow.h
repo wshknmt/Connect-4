@@ -36,6 +36,8 @@ private slots:
 
     void on_newGameButton_clicked();
 
+    void on_undoButton_clicked();
+
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
     bool checkWinOnBoard(int columnIndex);

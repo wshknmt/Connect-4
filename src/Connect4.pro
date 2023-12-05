@@ -13,14 +13,16 @@ SOURCES += \
     Bot.cpp \
     MainMenuWindow.cpp \
     main.cpp \
-    BoardWindow.cpp
+    BoardWindow.cpp \
+    PairInt64.cpp
 
 HEADERS += \
     Board.h \
     BoardWindow.h \
     Bot.h \
     MainMenuWindow.h \
-    debug.h
+    debug.h \
+    PairInt64.h
 
 FORMS += \
     forms/BoardWindow.ui \

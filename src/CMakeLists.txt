@@ -8,6 +8,8 @@ add_executable(${PROJECT_NAME}
   Bot.cpp
   MainMenuWindow.h
   MainMenuWindow.cpp
+  PairInt64.h
+  PairInt64.cpp
   main.cpp
 )
 
@@ -16,6 +18,7 @@ if(MSVC)
 		/W4 # Baseline reasonable warnings
 		/permissive- # standards conformance mode for MSVC compiler.
     /utf-8
+    /MP
 	)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	target_compile_options(${PROJECT_NAME} PRIVATE

@@ -3,6 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <cstdint>
+
+#include "PairInt64.h"
 
 
 class Board
@@ -30,6 +34,12 @@ public:
     int getMovesCounter();
     int getAllMovesCounter();
     bool checkDraw();
+    int getLastColumn();
+    PairInt64 hashCurrentPosition();
+    void addHashToMap(PairInt64 index, int ScoreValue);
+    bool checkHashInMap(PairInt64 index);
+    int getScoreFromMap(PairInt64 index);
+    static const int MAX_TEST_COLUMN = 6;
 private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
@@ -37,12 +47,14 @@ private:
     int playerToMove = 1;
     int movesCounter = 0;
     int allMovesCounter = 0;
+    int lastColumn;
 
     std::vector <std::vector<int> > fields;
     std::vector <int> columnOccupancy;
     std::vector <std::pair<int, int>> winPositions;
     int winCounter = 0;
     static Board* pInstance;
+    std::unordered_map<PairInt64, int, PairInt64Hash, PairInt64Equal> transpositionTable;
 
 };
 

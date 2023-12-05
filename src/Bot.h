@@ -6,6 +6,7 @@
 #include <QCoreApplication>
 #include <QEventLoop>
 #include "Board.h"
+#include "PairInt64.h"
 
 
 class Bot
