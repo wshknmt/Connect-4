@@ -1,6 +1,5 @@
 #include "PairInt64.h"
 
-
 std::size_t PairInt64Hash::operator()(const PairInt64& obj) const {
     return std::hash<uint64_t>()(obj.boardColor) ^ (std::hash<uint64_t>()(obj.boardOccupancy) << 1);
 }

@@ -39,6 +39,7 @@ public:
     void addHashToMap(PairInt64 index, int ScoreValue);
     bool checkHashInMap(PairInt64 index);
     int getScoreFromMap(PairInt64 index);
+
     static const int MAX_TEST_COLUMN = 6;
 private:
     static constexpr int WIDTH = 7;

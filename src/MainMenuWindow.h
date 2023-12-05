@@ -18,11 +18,8 @@ public:
 
 private slots:
     void on_startButtonPvP_clicked();
-
     void on_exitButton_clicked();
-
     void on_startButtonPvCRand_clicked();
-
     void on_startButtonPvCMinMax_clicked();
 
 private:

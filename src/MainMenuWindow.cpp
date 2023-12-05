@@ -8,40 +8,31 @@ MainMenuWindow::MainMenuWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
-MainMenuWindow::~MainMenuWindow()
-{
+MainMenuWindow::~MainMenuWindow() {
     delete ui;
 }
 
-void MainMenuWindow::on_startButtonPvP_clicked()
-{
+void MainMenuWindow::on_startButtonPvP_clicked() {
     BoardWindow *bw = new BoardWindow();
     Bot::getInstance()->setMode(0);
     bw->show();
     this->hide();
 }
 
-
-void MainMenuWindow::on_exitButton_clicked()
-{
+void MainMenuWindow::on_exitButton_clicked() {
     QApplication::quit();
 }
 
-
-void MainMenuWindow::on_startButtonPvCRand_clicked()
-{
+void MainMenuWindow::on_startButtonPvCRand_clicked() {
     BoardWindow *bw = new BoardWindow();
     Bot::getInstance()->setMode(1);
     bw->show();
     this->hide();
 }
 
-
-void MainMenuWindow::on_startButtonPvCMinMax_clicked()
-{
+void MainMenuWindow::on_startButtonPvCMinMax_clicked() {
     BoardWindow *bw = new BoardWindow();
     Bot::getInstance()->setMode(2);
     bw->show();
     this->hide();
 }
-

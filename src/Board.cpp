@@ -3,8 +3,7 @@
 
 Board* Board::pInstance = nullptr;
 
-Board::Board()
-{
+Board::Board() {
     for (int i = 0; i < HEIGHT; i++) {
         std::vector<int> v1;
         for (int j = 0; j < WIDTH; j++) {
@@ -46,9 +45,11 @@ void Board::print() {
 std::vector <std::vector<int> > Board::getFields() {
     return fields;
 }
+
 int Board::getWidth() {
     return WIDTH;
 }
+
 int Board::getHeight() {
     return HEIGHT;
 }
@@ -183,16 +184,16 @@ PairInt64 Board::hashCurrentPosition() {
 void Board::addHashToMap(PairInt64 index, int ScoreValue) {
     transpositionTable.insert({index, ScoreValue});
 }
-bool Board::checkHashInMap(PairInt64 index) {
 
+bool Board::checkHashInMap(PairInt64 index) {
     auto it = transpositionTable.find(index);
     if (it != transpositionTable.end())
         return true;
     return false;
 
 }
-int Board::getScoreFromMap(PairInt64 index) {
 
+int Board::getScoreFromMap(PairInt64 index) {
     auto it = transpositionTable.find(index);
     if (it != transpositionTable.end())
         return it->second;

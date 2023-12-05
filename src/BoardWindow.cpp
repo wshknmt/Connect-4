@@ -38,8 +38,7 @@ BoardWindow::BoardWindow(QWidget *parent)
     ui->column6Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
 }
 
-void BoardWindow::connectSignalsAndSlotsForColumnButtons()
-{
+void BoardWindow::connectSignalsAndSlotsForColumnButtons() {
     std::array columnButtons {
         ui->column0Button,
         ui->column1Button,
@@ -55,8 +54,7 @@ void BoardWindow::connectSignalsAndSlotsForColumnButtons()
     }
 }
 
-BoardWindow::~BoardWindow()
-{
+BoardWindow::~BoardWindow() {
     delete ui;
 }
 
@@ -75,12 +73,9 @@ void BoardWindow::refreshWindow() {
         }
 }
 
-void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex)
-{
+void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex) {
     Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->getPlayerToMove());
-    if (!Board::getInstance()->isColumnFree(columnIndex)) {
-        columnButton->setEnabled(false);
-    }
+    disableButtons();
     refreshWindow();
     if(checkWinOnBoard(columnIndex) || checkDrawOnBoard())
         return;
@@ -90,15 +85,12 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         int botMove = Bot::getInstance()->botTurn();
         checkWinOnBoard(botMove);
         checkDrawOnBoard();
-        if (!Board::getInstance()->isColumnFree(botMove)) {
-                columnButton->setEnabled(false);
-        }
         refreshWindow();
+        enableNotFullColumns();
         Board::getInstance()->changePlayerToMove();
     }
     Board::getInstance()->print();
     ui->undoButton->setEnabled(true);
-
 }
 
 bool BoardWindow::checkWinOnBoard(int columnIndex) {
@@ -134,7 +126,6 @@ bool BoardWindow::checkDrawOnBoard() {
     return false;
 }
 
-
 void BoardWindow::on_exitButton_clicked() {
     this->close();
 }
@@ -147,6 +138,16 @@ void BoardWindow::disableButtons() {
     ui->column4Button->setEnabled(false);
     ui->column5Button->setEnabled(false);
     ui->column6Button->setEnabled(false);
+}
+
+void BoardWindow::enableNotFullColumns() {
+    if (Board::getInstance()->isColumnFree(0)) ui->column0Button->setEnabled(true);
+    if (Board::getInstance()->isColumnFree(1)) ui->column1Button->setEnabled(true);
+    if (Board::getInstance()->isColumnFree(2)) ui->column2Button->setEnabled(true);
+    if (Board::getInstance()->isColumnFree(3)) ui->column3Button->setEnabled(true);
+    if (Board::getInstance()->isColumnFree(4)) ui->column4Button->setEnabled(true);
+    if (Board::getInstance()->isColumnFree(5)) ui->column5Button->setEnabled(true);
+    if (Board::getInstance()->isColumnFree(6)) ui->column6Button->setEnabled(true);
 }
 
 void BoardWindow::resetWindow() {
@@ -162,19 +163,14 @@ void BoardWindow::resetWindow() {
     ui->resultLabel->setText("");
 }
 
-
-void BoardWindow::on_newGameButton_clicked()
-{
+void BoardWindow::on_newGameButton_clicked() {
     resetWindow();
     refreshWindow();
 }
 
-
-void BoardWindow::on_undoButton_clicked()
-{
+void BoardWindow::on_undoButton_clicked() {
     Board::getInstance()->changePlayerToMove();
     Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->getLastColumn());
     ui->undoButton->setEnabled(false);
     refreshWindow();
 }
-

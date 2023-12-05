@@ -27,15 +27,13 @@ public:
     void refreshWindow();
     void buttonCLicked();
     void disableButtons();
+    void enableNotFullColumns();
     void resetWindow();
 
 private slots:
     void connectSignalsAndSlotsForColumnButtons();
-
     void on_exitButton_clicked();
-
     void on_newGameButton_clicked();
-
     void on_undoButton_clicked();
 
 private:
