@@ -39,6 +39,7 @@ public:
     void addHashToMap(PairInt64 index, int ScoreValue);
     bool checkHashInMap(PairInt64 index);
     int getScoreFromMap(PairInt64 index);
+    int getColumnOrder(int num);
 
     static const int MAX_TEST_COLUMN = 6;
 private:
@@ -56,6 +57,7 @@ private:
     int winCounter = 0;
     static Board* pInstance;
     std::unordered_map<PairInt64, int, PairInt64Hash, PairInt64Equal> transpositionTable;
+    int columnOrder[MAX_TEST_COLUMN];
 
 };
 
