@@ -70,7 +70,7 @@ int Bot::getMinMaxMove(int alpha, int beta) {
 
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-        if( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(Board::getInstance()->getColumnOrder(i)), Board::getInstance()->getPlayerToMove()))
+        if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove()))
             return i;
     }
 
@@ -78,14 +78,14 @@ int Bot::getMinMaxMove(int alpha, int beta) {
 
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
-        if ( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) ) {
-            play(Board::getInstance()->getColumnOrder(i));
+        if ( Board::getInstance()->isColumnFree(i) ) {
+            play(i);
             int newScore = -getMinMaxScore(-beta, -alpha);
             if ( newScore > alpha) {
                 alpha = newScore;
                 columnOfBestScore = i;
             }
-            undoPlay(Board::getInstance()->getColumnOrder(i));
+            undoPlay(i);
 
             std::cout<<"column: "<<i<<", score: "<<newScore<<std::endl;
             std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
@@ -120,7 +120,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
 
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-        if( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(Board::getInstance()->getColumnOrder(i)), Board::getInstance()->getPlayerToMove())) {
+        if( Board::getInstance()->isColumnFree(i) && Board::getInstance()->checkWin(i, Board::getInstance()->getFreeRowInColumn(i), Board::getInstance()->getPlayerToMove())) {
             recursiveLevel--;
             return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
         }
@@ -138,13 +138,13 @@ int Bot::getMinMaxScore(int alpha, int beta) {
 
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     //for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-        if ( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) ) {
-            play(Board::getInstance()->getColumnOrder(i));
+        if ( Board::getInstance()->isColumnFree(i) ) {
+            play(i);
             if (Board::getInstance()->getMovesCounter() <= 30) {
                 PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
                 int score = Board::getInstance()->getScoreFromMap(curHash);
                 if ( score != 99999) {
-                    undoPlay(Board::getInstance()->getColumnOrder(i));
+                    undoPlay(i);
                     recursiveLevel--;
                     return score;
                 }
@@ -156,13 +156,13 @@ int Bot::getMinMaxScore(int alpha, int beta) {
                     if (!Board::getInstance()->checkHashInMap(curHash))
                         Board::getInstance()->addHashToMap(curHash, newScore);
                 }
-                undoPlay(Board::getInstance()->getColumnOrder(i));
+                undoPlay(i);
                 recursiveLevel--;
                 return newScore;
             }
             if ( newScore > alpha) alpha = newScore;
 
-            undoPlay(Board::getInstance()->getColumnOrder(i));
+            undoPlay(i);
         }
     }
     if (Board::getInstance()->getMovesCounter() <= 30) {

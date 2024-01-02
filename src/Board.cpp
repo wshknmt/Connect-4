@@ -18,9 +18,6 @@ Board::Board() {
         columnOccupancy.push_back(colOccupancy);
     }
 
-    for(int i = 0; i < MAX_TEST_COLUMN; i++)
-        columnOrder[i] = MAX_TEST_COLUMN / 2 + ( 1 - 2 * (i % 2)) * (i + 1) / 2;
-
 }
 
 Board* Board::getInstance() {
@@ -202,8 +199,4 @@ int Board::getScoreFromMap(PairInt64 index) {
         return it->second;
     return 99999;
 
-}
-
-int Board::getColumnOrder(int num) {
-    return columnOrder[num];
 }
