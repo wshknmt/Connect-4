@@ -81,6 +81,8 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         return;
     Board::getInstance()->changePlayerToMove();
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     if (Bot::getInstance()->getMode() != 0) {
         int botMove = Bot::getInstance()->botTurn();
         checkWinOnBoard(botMove);
@@ -91,6 +93,11 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
     }
     Board::getInstance()->print();
     ui->undoButton->setEnabled(true);
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+
 }
 
 bool BoardWindow::checkWinOnBoard(int columnIndex) {
