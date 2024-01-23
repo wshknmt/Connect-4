@@ -159,6 +159,8 @@ int Board::getLastColumn() {
 }
 
 PairInt64 Board::hashCurrentPosition() {
+
+    auto start = std::chrono::high_resolution_clock::now();
     uint64_t boardColor = 0; // 1 - red, 0 - blue
     uint64_t boardOccupancy = 0; // 1 - occupied position, 0 - empty position
 
@@ -177,6 +179,9 @@ PairInt64 Board::hashCurrentPosition() {
     PairInt64 pair;
     pair.boardColor = boardColor;
     pair.boardOccupancy = boardOccupancy;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    totalHashTime += duration;
 
     return pair;
 }
@@ -186,7 +191,11 @@ void Board::addHashToMap(PairInt64 index, int ScoreValue) {
 }
 
 bool Board::checkHashInMap(PairInt64 index) {
+    auto start = std::chrono::high_resolution_clock::now();
     auto it = transpositionTable.find(index);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    totalSearchTime += duration;
     if (it != transpositionTable.end())
         return true;
     return false;
@@ -194,9 +203,21 @@ bool Board::checkHashInMap(PairInt64 index) {
 }
 
 int Board::getScoreFromMap(PairInt64 index) {
+    auto start = std::chrono::high_resolution_clock::now();
     auto it = transpositionTable.find(index);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    totalSearchTime += duration;
     if (it != transpositionTable.end())
         return it->second;
     return 99999;
 
+}
+
+void Board::printTotalHashTime() {
+    std::cout << "Total time taken to hash: " << totalHashTime.count() << " seconds" << std::endl;
+}
+
+void Board::printTotalSearchTime() {
+    std::cout << "Total time taken to search in map: " << totalSearchTime.count() << " seconds" << std::endl;
 }

@@ -8,7 +8,6 @@
 #include <QGraphicsScene>
 #include <QImage>
 #include <QPushButton>
-#include <chrono>
 #include "Board.h"
 #include "Bot.h"
 
@@ -42,6 +41,7 @@ private:
     bool checkWinOnBoard(int columnIndex);
     bool checkDrawOnBoard();
 
+    bool endOfGame = false;
     Ui::BoardWindow *ui;
     QGraphicsScene *scene;
     std::vector<std::vector<QGraphicsEllipseItem*>> qtBoard;

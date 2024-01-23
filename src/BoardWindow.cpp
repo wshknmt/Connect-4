@@ -90,6 +90,8 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         refreshWindow();
         enableNotFullColumns();
         Board::getInstance()->changePlayerToMove();
+    } else if (Bot::getInstance()->getMode() == 0) {
+        enableNotFullColumns();
     }
     Board::getInstance()->print();
     ui->undoButton->setEnabled(true);
@@ -97,11 +99,14 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+    Board::getInstance()->printTotalHashTime();
+    Board::getInstance()->printTotalSearchTime();
 
 }
 
 bool BoardWindow::checkWinOnBoard(int columnIndex) {
     if (Board::getInstance()->checkWin(columnIndex, Board::getInstance()->getLastDroppedRowInColumn(columnIndex), Board::getInstance()->getPlayerToMove())) {
+        endOfGame = true;
         std::vector <std::pair<int, int>> winPositions = Board::getInstance()->getWinPositions();
         for (int i = 0; i < winPositions.size(); i++) {
                 if (Board::getInstance()->getPlayerToMove() == 1) {
@@ -128,6 +133,7 @@ bool BoardWindow::checkWinOnBoard(int columnIndex) {
 bool BoardWindow::checkDrawOnBoard() {
     if (Board::getInstance()->checkDraw()) {
         ui->resultLabel->setText("Draw!!!");
+        endOfGame = true;
         return true;
     }
     return false;
@@ -148,6 +154,7 @@ void BoardWindow::disableButtons() {
 }
 
 void BoardWindow::enableNotFullColumns() {
+    if (endOfGame) return;
     if (Board::getInstance()->isColumnFree(0)) ui->column0Button->setEnabled(true);
     if (Board::getInstance()->isColumnFree(1)) ui->column1Button->setEnabled(true);
     if (Board::getInstance()->isColumnFree(2)) ui->column2Button->setEnabled(true);
@@ -168,6 +175,7 @@ void BoardWindow::resetWindow() {
     ui->column5Button->setEnabled(true);
     ui->column6Button->setEnabled(true);
     ui->resultLabel->setText("");
+    endOfGame = false;
 }
 
 void BoardWindow::on_newGameButton_clicked() {

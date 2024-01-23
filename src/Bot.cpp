@@ -97,7 +97,7 @@ int Bot::getMinMaxMove(int alpha, int beta) {
 }
 
 int Bot::getMinMaxScore(int alpha, int beta) {
-    if (Board::getInstance()->getMovesCounter() <= 30) {
+    if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
         PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
         int score = Board::getInstance()->getScoreFromMap(curHash);
         if ( score != 99999) {
@@ -140,7 +140,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
     //for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if ( Board::getInstance()->isColumnFree(i) ) {
             play(i);
-            if (Board::getInstance()->getMovesCounter() <= 30) {
+            if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
                 PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
                 int score = Board::getInstance()->getScoreFromMap(curHash);
                 if ( score != 99999) {
@@ -151,7 +151,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
             }
             int newScore = -getMinMaxScore(-beta, -alpha);
             if ( newScore >= beta) {
-                if (Board::getInstance()->getMovesCounter() <= 30) {
+                if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
                     PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
                     if (!Board::getInstance()->checkHashInMap(curHash))
                         Board::getInstance()->addHashToMap(curHash, newScore);
@@ -165,7 +165,7 @@ int Bot::getMinMaxScore(int alpha, int beta) {
             undoPlay(i);
         }
     }
-    if (Board::getInstance()->getMovesCounter() <= 30) {
+    if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
         PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
         if (!Board::getInstance()->checkHashInMap(curHash))
             Board::getInstance()->addHashToMap(curHash, alpha);

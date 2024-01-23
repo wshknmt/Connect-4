@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <cstdint>
+#include <chrono>
 
 #include "PairInt64.h"
 
@@ -39,8 +40,9 @@ public:
     void addHashToMap(PairInt64 index, int ScoreValue);
     bool checkHashInMap(PairInt64 index);
     int getScoreFromMap(PairInt64 index);
-
-    static const int MAX_TEST_COLUMN = 6;
+    void printTotalHashTime();
+    void printTotalSearchTime();
+    static const int MAX_TEST_COLUMN = 5;
 private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
@@ -49,13 +51,15 @@ private:
     int movesCounter = 0;
     int allMovesCounter = 0;
     int lastColumn;
+    std::chrono::duration<double> totalHashTime = std::chrono::duration<double>(0);
+    std::chrono::duration<double> totalSearchTime = std::chrono::duration<double>(0);
 
     std::vector <std::vector<int> > fields;
     std::vector <int> columnOccupancy;
     std::vector <std::pair<int, int>> winPositions;
     int winCounter = 0;
     static Board* pInstance;
-    std::unordered_map<PairInt64, int, PairInt64Hash, PairInt64Equal> transpositionTable;
+    std::unordered_map <PairInt64, int> transpositionTable;
 
 };
 
