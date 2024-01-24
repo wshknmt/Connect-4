@@ -42,7 +42,9 @@ public:
     int getScoreFromMap(PairInt64 index);
     void printTotalHashTime();
     void printTotalSearchTime();
-    static const int MAX_TEST_COLUMN = 5;
+    int getColumnOrder(int num);
+
+    static const int MAX_TEST_COLUMN = 7;
 private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
@@ -60,6 +62,7 @@ private:
     int winCounter = 0;
     static Board* pInstance;
     std::unordered_map <PairInt64, int> transpositionTable;
+    int columnOrder[MAX_TEST_COLUMN];
 
 };
 

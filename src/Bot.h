@@ -26,7 +26,7 @@ public:
     void play(int column);
     void undoPlay(int column);
 
-    static const int MAX_TOKENS_TO_HASH_IN_TABLE = 30;
+    static const int MAX_TOKENS_TO_HASH_IN_TABLE = 34;
 
 private:
     static Bot* pInstance;
