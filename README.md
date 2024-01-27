@@ -7,6 +7,7 @@ Program został napisany w języku C++. Interfejs graficzny stworzony przy użyc
 * między dwoma graczami
 * gracz kontra komputer - algorytm naiwny
 * gracz kontra komputer - algorytm perfekcyjny (na razie działa dla maksymalnej planszy 6x6)
+
 Interfejs gry wygląda następująco:
 
 ![okno_gry](./docs/pictures/boardWindow.png)
