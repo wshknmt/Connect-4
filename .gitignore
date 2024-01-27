@@ -452,3 +452,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+*transposition_table*

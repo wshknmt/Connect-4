@@ -75,7 +75,9 @@
         "xutility": "cpp",
         "any": "cpp",
         "set": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "fstream": "cpp",
+        "filesystem": "cpp"
     },
     "cmake.configureOnEdit": false
 }

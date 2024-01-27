@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include <QImage>
 #include <QPushButton>
+#include <filesystem>
 #include "Board.h"
 #include "Bot.h"
 

@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <cstdint>
 #include <chrono>
+#include <fstream>
+#include <filesystem>
 
 #include "PairInt64.h"
 
@@ -43,8 +45,13 @@ public:
     void printTotalHashTime();
     void printTotalSearchTime();
     int getColumnOrder(int num);
+    void saveTranspositionTableToFile();
+    void loadTranspositionTableFromFile();
 
-    static const int MAX_TEST_COLUMN = 7;
+    static const int MAX_TEST_COLUMN = 6;
+    bool LOAD_TRANSPOSITION_TABLE = true;
+    bool SAVE_TRANSPOSITION_TABLE = false;
+
 private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;

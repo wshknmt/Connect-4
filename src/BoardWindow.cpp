@@ -36,6 +36,8 @@ BoardWindow::BoardWindow(QWidget *parent)
     ui->column4Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     ui->column5Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     ui->column6Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    if (Board::getInstance()->LOAD_TRANSPOSITION_TABLE)
+        Board::getInstance()->loadTranspositionTableFromFile();
 }
 
 void BoardWindow::connectSignalsAndSlotsForColumnButtons() {
@@ -140,6 +142,8 @@ bool BoardWindow::checkDrawOnBoard() {
 }
 
 void BoardWindow::on_exitButton_clicked() {
+    if (Board::getInstance()->SAVE_TRANSPOSITION_TABLE)
+        Board::getInstance()->saveTranspositionTableToFile();
     this->close();
 }
 

@@ -228,3 +228,50 @@ void Board::printTotalSearchTime() {
 int Board::getColumnOrder(int num) {
     return columnOrder[num];
 }
+
+void Board::saveTranspositionTableToFile() {
+    std::filesystem::path currentPath = std::filesystem::current_path();
+    std::filesystem::path targetPath = currentPath.parent_path().parent_path().parent_path();
+    targetPath += "\\data\\transposition_table";
+
+    // std::string filename = "transposition_table";
+
+    std::ofstream outFile(targetPath, std::ios::binary);
+
+    if (outFile.is_open()) {
+        for (const auto& entry : transpositionTable) {
+            outFile.write(reinterpret_cast<const char*>(&entry.first), sizeof(PairInt64));
+            outFile.write(reinterpret_cast<const char*>(&entry.second), sizeof(int));
+        }
+        outFile.close();
+    } else {
+        std::cerr << "Error opening file for writing: " << targetPath << std::endl;
+    }
+}
+
+void Board::loadTranspositionTableFromFile() {
+    std::filesystem::path currentPath = std::filesystem::current_path();
+    std::filesystem::path targetPath = currentPath.parent_path().parent_path().parent_path();
+    targetPath += "\\data\\transposition_table";
+    std::ifstream inFile(targetPath, std::ios::binary);
+
+    if (inFile.is_open()) {
+        while (true) {
+            PairInt64 key;
+            int value;
+
+            inFile.read(reinterpret_cast<char*>(&key), sizeof(PairInt64));
+            inFile.read(reinterpret_cast<char*>(&value), sizeof(int));
+
+            if (inFile.eof()) {
+                break;
+            }
+
+            transpositionTable[key] = value;
+        }
+
+        inFile.close();
+    } else {
+        std::cerr << "Error opening file for reading: " << targetPath << std::endl;
+    }
+}
