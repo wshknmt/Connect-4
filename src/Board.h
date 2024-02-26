@@ -8,6 +8,7 @@
 #include <chrono>
 #include <fstream>
 #include <filesystem>
+#include <bitset>
 
 #include "PairInt64.h"
 
@@ -47,10 +48,15 @@ public:
     int getColumnOrder(int num);
     void saveTranspositionTableToFile();
     void loadTranspositionTableFromFile();
+    void printBinary(int64_t num);
+    void printTranspositionTable();
+    int getPointResult(int player);
+    void checkLineInDirection(int col, int row, int direction, int token);
+    int getResults(int player, int col, int row);
 
     static const int MAX_TEST_COLUMN = 6;
     bool LOAD_TRANSPOSITION_TABLE = true;
-    bool SAVE_TRANSPOSITION_TABLE = false;
+    bool SAVE_TRANSPOSITION_TABLE = true;
 
 private:
     static constexpr int WIDTH = 7;
@@ -67,9 +73,12 @@ private:
     std::vector <int> columnOccupancy;
     std::vector <std::pair<int, int>> winPositions;
     int winCounter = 0;
+    int lineCounter = 0;
+    int allLineCounter = 0;
     static Board* pInstance;
     std::unordered_map <PairInt64, int> transpositionTable;
     int columnOrder[MAX_TEST_COLUMN];
+    int weights[5] = {0, 1, 10, 50, 500};
 
 };
 

@@ -27,8 +27,6 @@ BoardWindow::BoardWindow(QWidget *parent)
         qtBoard.push_back(rectV);
     }
 
-    Board::getInstance()->print();
-
     ui->column0Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     ui->column1Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     ui->column2Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");

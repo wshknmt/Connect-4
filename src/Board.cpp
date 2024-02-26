@@ -43,6 +43,11 @@ void Board::print() {
     }
     std::cout << std::endl;
     std::cout << std::endl;
+
+    // printTranspositionTable();
+    std::cout<<"Points of 1 player: "<< getPointResult(1) << std::endl;
+    std::cout<<"Points of 2 player: "<< getPointResult(2) << std::endl;
+
 }
 
 std::vector <std::vector<int> > Board::getFields() {
@@ -273,5 +278,64 @@ void Board::loadTranspositionTableFromFile() {
         inFile.close();
     } else {
         std::cerr << "Error opening file for reading: " << targetPath << std::endl;
+    }
+}
+
+void Board::printBinary(int64_t num) {
+    std::bitset<64> binary(num);
+    std::cout << binary;
+}
+
+void Board::printTranspositionTable() {
+     for (auto it = transpositionTable.begin(); it != transpositionTable.end(); ++it) {
+        const PairInt64& key = it->first;
+        int value = it->second;
+        std::cout << "Value: " << value <<", Key: {";
+        printBinary(key.boardColor);
+        std::cout << ", ";
+        printBinary(key.boardOccupancy);
+        std::cout << std::endl;
+    }
+}
+
+int Board::getPointResult(int player){
+    int points = 0;
+    for (unsigned int row = 0; row < HEIGHT; row++) {
+        for (unsigned int col = 0; col < MAX_TEST_COLUMN; col++) {
+            if (fields[row][col] == player) {
+                points += getResults(player, col, row);
+            }
+        }
+    }
+    return points;
+}
+
+int Board::getResults(int token, int col, int row) {
+    int result = 0;
+    for (int i = 0; i < 8; ++i) {
+        lineCounter = 1;
+        allLineCounter = 1;
+        checkLineInDirection(col + directions[i][0], row + directions[i][1], i, token);
+        if (allLineCounter >= 4)
+            result += weights[lineCounter];
+    }
+    return result;
+}
+
+void Board::checkLineInDirection(int col, int row, int direction, int token) {
+    if (allLineCounter >= 4) return;
+    if (col < 0 || row < 0 || col >= WIDTH || row >= HEIGHT) {
+        allLineCounter = 0;
+        lineCounter = 0;
+        return;
+    }
+    if (fields[row][col] == token) {
+        lineCounter++;
+        allLineCounter++;
+        checkLineInDirection(col + directions[direction][0], row + directions[direction][1], direction, token);
+    }
+    else if (fields[row][col] == 0) {
+        allLineCounter++;
+        checkLineInDirection(col + directions[direction][0], row + directions[direction][1], direction, token);
     }
 }

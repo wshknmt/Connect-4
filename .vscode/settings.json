@@ -77,7 +77,8 @@
         "set": "cpp",
         "memory_resource": "cpp",
         "fstream": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "bitset": "cpp"
     },
     "cmake.configureOnEdit": false
 }
