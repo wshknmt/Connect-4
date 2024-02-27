@@ -31,8 +31,8 @@
      <rect>
       <x>10</x>
       <y>140</y>
-      <width>785</width>
-      <height>360</height>
+      <width>816</width>
+      <height>396</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -124,6 +124,27 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="startButtonPvCHeuristic">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>MinMax strategy with heuristic function</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -168,7 +189,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

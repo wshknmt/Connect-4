@@ -10,7 +10,6 @@ Bot::Bot()
 int Bot::botTurn() {
 
     int column = getMove();
-    std::cout<<"probuje wrzucic do kolumny: "<<column<<std::endl<<std::endl;
     wait();
     Board::getInstance()->dropTokenToColumn(column, Board::getInstance()->getPlayerToMove());
     return column;
@@ -48,6 +47,9 @@ int Bot::getMove() {
     case 2:
         return getMinMaxMove( -Board::getInstance()->getNumOfFields() / 2, Board::getInstance()->getNumOfFields() / 2);
         // return getMinMaxMove( -1, 1);
+        break;
+    case 3:
+        return getHeuristicMove();
         break;
     default:
         return 999;
@@ -186,3 +188,29 @@ void Bot::wait() {
 void Bot::resetBot() {
     mode = 0;
 }
+
+int Bot::getHeuristicMove() {
+    int bestScore = INT_MIN;
+    int bestIndex = 0;
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
+        if (Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i))) {
+            play(Board::getInstance()->getColumnOrder(i));
+
+            int opponentScore = Board::getInstance()->getPointResult(Board::getInstance()->getPlayerToMove());
+            Board::getInstance()->changePlayerToMove();
+            int playerScore = Board::getInstance()->getPointResult(Board::getInstance()->getPlayerToMove());
+            Board::getInstance()->changePlayerToMove();
+
+            int score = playerScore - opponentScore;
+            if (score > bestScore) {
+                bestScore = score;
+                bestIndex = i;
+            }
+            undoPlay(Board::getInstance()->getColumnOrder(i));
+            std::cout<<"column num: "<< Board::getInstance()->getColumnOrder(i) << " Pscore: "<<playerScore<<" OScore " <<opponentScore<<" finScore: "<<score<<std::endl;
+        }
+    }
+
+    return Board::getInstance()->getColumnOrder(bestIndex);
+}
+

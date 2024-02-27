@@ -25,6 +25,7 @@ public:
     void resetBot();
     void play(int column);
     void undoPlay(int column);
+    int getHeuristicMove();
 
     static const int MAX_TOKENS_TO_HASH_IN_TABLE = 34;
 
