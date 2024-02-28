@@ -17,10 +17,13 @@ public:
     ~MainMenuWindow();
 
 private slots:
-    void on_startButtonPvP_clicked();
+
     void on_exitButton_clicked();
+    void openBoardWindow(int gameMode);
+    void on_startButtonPvP_clicked();
     void on_startButtonPvCRand_clicked();
     void on_startButtonPvCMinMax_clicked();
+    void on_startButtonPvCSingleHeuristic_clicked();
     void on_startButtonPvCHeuristic_clicked();
 
 private:

@@ -39,7 +39,7 @@ void Bot::undoPlay(int column) {
 }
 
 int Bot::getMove() {
-    // std::cout<<"mode: "<<getMode()<<std::endl<<std::endl;
+    std::pair<int, int> result;
     switch(getMode()) {
     case 1:
         return getRandomMove();
@@ -50,6 +50,10 @@ int Bot::getMove() {
         break;
     case 3:
         return getHeuristicMove();
+        break;
+    case 4:
+        result = getHeuristicMinMaxMove(6, true);
+        return result.second;
         break;
     default:
         return 999;
@@ -91,7 +95,6 @@ int Bot::getMinMaxMove(int alpha, int beta) {
 
             std::cout<<"column: "<<Board::getInstance()->getColumnOrder(i)<<", score: "<<newScore<<std::endl;
             std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
-            std::cout<<"recursiveLevel: "<<recursiveLevel<<std::endl;
         }
 
     }
@@ -106,16 +109,9 @@ int Bot::getMinMaxScore(int alpha, int beta) {
             return score;
         }
     }
-    recursiveLevel++;
-    // int x = Board::getInstance()->getNumOfFields();
-    // if (recursiveLevel >= x/4.0) {
-    //     recursiveLevel--;
-    //     return alpha;
-    // }
     if (Board::getInstance()->getAllMovesCounter() % 1000000 == 0)
         std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
     if (Board::getInstance()->checkDraw() ) {
-        recursiveLevel--;
         return 0;
     }
 
@@ -123,7 +119,6 @@ int Bot::getMinMaxScore(int alpha, int beta) {
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
     // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) && Board::getInstance()->checkWin(Board::getInstance()->getColumnOrder(i), Board::getInstance()->getFreeRowInColumn(Board::getInstance()->getColumnOrder(i)), Board::getInstance()->getPlayerToMove())) {
-            recursiveLevel--;
             return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
         }
 
@@ -133,7 +128,6 @@ int Bot::getMinMaxScore(int alpha, int beta) {
     if (beta > max) {
         beta = max;
         if (alpha >= beta) {
-            recursiveLevel--;
             return beta;
         }
     }
@@ -147,7 +141,6 @@ int Bot::getMinMaxScore(int alpha, int beta) {
                 int score = Board::getInstance()->getScoreFromMap(curHash);
                 if ( score != 99999) {
                     undoPlay(Board::getInstance()->getColumnOrder(i));
-                    recursiveLevel--;
                     return score;
                 }
             }
@@ -159,7 +152,6 @@ int Bot::getMinMaxScore(int alpha, int beta) {
                         Board::getInstance()->addHashToMap(curHash, newScore);
                 }
                 undoPlay(Board::getInstance()->getColumnOrder(i));
-                recursiveLevel--;
                 return newScore;
             }
             if ( newScore > alpha) alpha = newScore;
@@ -172,7 +164,6 @@ int Bot::getMinMaxScore(int alpha, int beta) {
         if (!Board::getInstance()->checkHashInMap(curHash))
             Board::getInstance()->addHashToMap(curHash, alpha);
     }
-    recursiveLevel--;
     return alpha;
 }
 
@@ -200,7 +191,7 @@ int Bot::getHeuristicMove() {
             Board::getInstance()->changePlayerToMove();
             int playerScore = Board::getInstance()->getPointResult(Board::getInstance()->getPlayerToMove());
             Board::getInstance()->changePlayerToMove();
-
+            playerScore = playerScore * 2 / 3;
             int score = playerScore - opponentScore;
             if (score > bestScore) {
                 bestScore = score;
@@ -212,5 +203,66 @@ int Bot::getHeuristicMove() {
     }
 
     return Board::getInstance()->getColumnOrder(bestIndex);
+}
+
+//Nowe podejście MinMax
+std::pair<int, int> Bot::getHeuristicMinMaxMove(int depth, bool maximizingPlayer) {
+    if (depth == 0 || Board::getInstance()->checkDraw()) {
+        return evaluateHeuristicMinMax();
+    }
+
+    if (maximizingPlayer) {
+        int bestValue = INT_MIN;
+        int bestIndex = -1;
+        for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
+            if (Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i))) {
+                play(Board::getInstance()->getColumnOrder(i));
+
+                std::pair<int, int> value;
+                if (Board::getInstance()->checkWin(Board::getInstance()->getColumnOrder(i), Board::getInstance()->getLastDroppedRowInColumn(Board::getInstance()->getColumnOrder(i)), (Board::getInstance()->getPlayerToMove() % 2 + 1))) {
+                    value.first = Board::getInstance()->getWeight(4);
+                    value.second = Board::getInstance()->getColumnOrder(i);
+                } else {
+                    value = getHeuristicMinMaxMove(depth - 1, false);
+                }
+                undoPlay(Board::getInstance()->getColumnOrder(i));
+
+                if (value.first > bestValue) {
+                    bestValue = value.first;
+                    bestIndex = Board::getInstance()->getColumnOrder(i);
+                }
+            }
+        }
+        return std::make_pair(bestValue, bestIndex);
+    } else {
+        int bestValue = INT_MAX;
+        int bestIndex = -1;
+        for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
+            if (Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i))) {
+                play(Board::getInstance()->getColumnOrder(i));
+
+                std::pair<int, int> value;
+                if (Board::getInstance()->checkWin(Board::getInstance()->getColumnOrder(i), Board::getInstance()->getLastDroppedRowInColumn(Board::getInstance()->getColumnOrder(i)), (Board::getInstance()->getPlayerToMove() % 2 + 1))) {
+                    value.first = -Board::getInstance()->getWeight(4);
+                    value.second = Board::getInstance()->getColumnOrder(i);
+                } else {
+                    value = getHeuristicMinMaxMove(depth - 1, true);
+                }
+                undoPlay(Board::getInstance()->getColumnOrder(i));
+                if (value.first < bestValue) {
+                    bestValue = value.first;
+                    bestIndex = Board::getInstance()->getColumnOrder(i);
+                }
+            }
+        }
+        return std::make_pair(bestValue, bestIndex);
+    }
+}
+
+std::pair<int, int> Bot::evaluateHeuristicMinMax() {
+    int opponentScore = Board::getInstance()->getPointResult(Board::getInstance()->getPlayerToMove());
+    int playerScore =   Board::getInstance()->getPointResult(Board::getInstance()->getNextPlayerToMove());
+    // opponentScore = playerScore / 3;
+    return std::make_pair(playerScore - opponentScore, -1);
 }
 

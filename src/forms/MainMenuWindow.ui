@@ -32,7 +32,7 @@
       <x>10</x>
       <y>140</y>
       <width>816</width>
-      <height>396</height>
+      <height>462</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -120,6 +120,27 @@
          </property>
          <property name="text">
           <string>MinMax strategy</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="startButtonPvCSingleHeuristic">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Single heuristic function</string>
          </property>
         </widget>
        </item>

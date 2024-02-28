@@ -60,17 +60,17 @@ BoardWindow::~BoardWindow() {
 
 void BoardWindow::refreshWindow() {
 
-        for (int i = 0; i < Board::getInstance()->getHeight(); i++) {
-            for (int j = 0; j < Board::getInstance()->getWidth(); j++) {
-                if (Board::getInstance()->getFields()[i][j] == 1) {
-                    qtBoard[j][i]->setBrush(QBrush(Qt::red));
-                } else if (Board::getInstance()->getFields()[i][j] == 2) {
-                    qtBoard[j][i]->setBrush(QBrush(Qt::blue));
-                } else if (Board::getInstance()->getFields()[i][j] == 0) {
-                    qtBoard[j][i]->setBrush(QBrush(Qt::NoBrush));
-                }
+    for (int i = 0; i < Board::getInstance()->getHeight(); i++) {
+        for (int j = 0; j < Board::getInstance()->getWidth(); j++) {
+            if (Board::getInstance()->getFields()[i][j] == 1) {
+                qtBoard[j][i]->setBrush(QBrush(Qt::red));
+            } else if (Board::getInstance()->getFields()[i][j] == 2) {
+                qtBoard[j][i]->setBrush(QBrush(Qt::blue));
+            } else if (Board::getInstance()->getFields()[i][j] == 0) {
+                qtBoard[j][i]->setBrush(QBrush(Qt::NoBrush));
             }
         }
+    }
 }
 
 void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex) {
@@ -85,8 +85,8 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
 
     if (Bot::getInstance()->getMode() != 0) {
         int botMove = Bot::getInstance()->botTurn();
-        checkWinOnBoard(botMove);
-        checkDrawOnBoard();
+        if(checkWinOnBoard(botMove) || checkDrawOnBoard())
+            return;
         refreshWindow();
         enableNotFullColumns();
         Board::getInstance()->changePlayerToMove();
@@ -117,7 +117,7 @@ bool BoardWindow::checkWinOnBoard(int columnIndex) {
                         ui->resultLabel->setText("Player won!!!");
                 }
                 else {
-                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,50)));
+                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,139)));
                     if (Bot::getInstance()->getMode() == 0)
                         ui->resultLabel->setText("Player 2 won!!!");
                     else

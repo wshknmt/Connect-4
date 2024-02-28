@@ -12,35 +12,33 @@ MainMenuWindow::~MainMenuWindow() {
     delete ui;
 }
 
-void MainMenuWindow::on_startButtonPvP_clicked() {
-    BoardWindow *bw = new BoardWindow();
-    Bot::getInstance()->setMode(0);
-    bw->show();
-    this->hide();
-}
-
 void MainMenuWindow::on_exitButton_clicked() {
     QApplication::quit();
 }
 
-void MainMenuWindow::on_startButtonPvCRand_clicked() {
+void MainMenuWindow::openBoardWindow(int gameMode) {
     BoardWindow *bw = new BoardWindow();
-    Bot::getInstance()->setMode(1);
+    Bot::getInstance()->setMode(gameMode);
     bw->show();
     this->hide();
+}
+
+void MainMenuWindow::on_startButtonPvP_clicked() {
+    openBoardWindow(0);
+}
+
+void MainMenuWindow::on_startButtonPvCRand_clicked() {
+    openBoardWindow(1);
 }
 
 void MainMenuWindow::on_startButtonPvCMinMax_clicked() {
-    BoardWindow *bw = new BoardWindow();
-    Bot::getInstance()->setMode(2);
-    bw->show();
-    this->hide();
+    openBoardWindow(2);
+}
+
+void MainMenuWindow::on_startButtonPvCSingleHeuristic_clicked() {
+    openBoardWindow(3);
 }
 
 void MainMenuWindow::on_startButtonPvCHeuristic_clicked() {
-    BoardWindow *bw = new BoardWindow();
-    Bot::getInstance()->setMode(3);
-    bw->show();
-    this->hide();
+    openBoardWindow(4);
 }
-

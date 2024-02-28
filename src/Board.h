@@ -12,7 +12,6 @@
 
 #include "PairInt64.h"
 
-
 class Board
 {
 public:
@@ -30,6 +29,7 @@ public:
     bool checkWin(int col, int row, int token);
     void checkDirection(int col, int row, int direction, int token);
     int getPlayerToMove();
+    int getNextPlayerToMove();
     void changePlayerToMove();
     int getFreeRowInColumn(int col);
     int getLastDroppedRowInColumn(int col);
@@ -46,6 +46,7 @@ public:
     void printTotalHashTime();
     void printTotalSearchTime();
     int getColumnOrder(int num);
+    int getWeight(int num);
     void saveTranspositionTableToFile();
     void loadTranspositionTableFromFile();
     void printBinary(int64_t num);
@@ -54,9 +55,9 @@ public:
     void checkLineInDirection(int col, int row, int direction, int token);
     int getResults(int player, int col, int row);
 
-    static const int MAX_TEST_COLUMN = 6;
-    bool LOAD_TRANSPOSITION_TABLE = true;
-    bool SAVE_TRANSPOSITION_TABLE = true;
+    static const int MAX_TEST_COLUMN = 7;
+    bool LOAD_TRANSPOSITION_TABLE = false;
+    bool SAVE_TRANSPOSITION_TABLE = false;
 
 private:
     static constexpr int WIDTH = 7;

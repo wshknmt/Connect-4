@@ -27,12 +27,14 @@ public:
     void undoPlay(int column);
     int getHeuristicMove();
 
+    std::pair<int, int> getHeuristicMinMaxMove(int depth, bool maximizingPlayer);
+    std::pair<int, int> evaluateHeuristicMinMax();
+
     static const int MAX_TOKENS_TO_HASH_IN_TABLE = 34;
 
 private:
     static Bot* pInstance;
     int mode;
-    int recursiveLevel = 0;
 };
 
 #endif // BOT_H

@@ -125,13 +125,17 @@ int Board::getPlayerToMove() {
     return playerToMove;
 }
 
+int Board::getNextPlayerToMove() {
+    return playerToMove % 2 + 1;
+}
+
 void Board::changePlayerToMove() {
     playerToMove = playerToMove % 2 + 1;
 }
 
 std::vector <std::pair<int, int>> Board::getWinPositions() {
     return winPositions;
-};
+}
 
 void Board::resetBoard() {
     for (unsigned int i = 0; i < HEIGHT; i++)
@@ -234,12 +238,14 @@ int Board::getColumnOrder(int num) {
     return columnOrder[num];
 }
 
+int Board::getWeight(int num) {
+    return weights[num];
+}
+
 void Board::saveTranspositionTableToFile() {
     std::filesystem::path currentPath = std::filesystem::current_path();
     std::filesystem::path targetPath = currentPath.parent_path().parent_path().parent_path();
     targetPath += "\\data\\transposition_table";
-
-    // std::string filename = "transposition_table";
 
     std::ofstream outFile(targetPath, std::ios::binary);
 
