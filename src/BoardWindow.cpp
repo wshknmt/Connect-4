@@ -85,8 +85,10 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
 
     if (Bot::getInstance()->getMode() != 0) {
         int botMove = Bot::getInstance()->botTurn();
-        if(checkWinOnBoard(botMove) || checkDrawOnBoard())
+        if(checkWinOnBoard(botMove) || checkDrawOnBoard()) {
+            if (checkDrawOnBoard()) refreshWindow();
             return;
+        }
         refreshWindow();
         enableNotFullColumns();
         Board::getInstance()->changePlayerToMove();

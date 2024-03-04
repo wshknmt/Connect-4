@@ -17,8 +17,7 @@ public:
     int botTurn();
     int getMove();
     int getRandomMove();
-    int getMinMaxMove(int alpha, int beta);
-    int getMinMaxScore(int alpha, int beta);
+    std::pair<int, int> getMinMaxMove(int alpha, int beta);
     void setMode(int mode);
     int getMode();
     void wait();
@@ -35,6 +34,7 @@ public:
 private:
     static Bot* pInstance;
     int mode;
+    int searchDepth = 0;
 };
 
 #endif // BOT_H

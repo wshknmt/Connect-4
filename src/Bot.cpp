@@ -45,7 +45,8 @@ int Bot::getMove() {
         return getRandomMove();
         break;
     case 2:
-        return getMinMaxMove( -Board::getInstance()->getNumOfFields() / 2, Board::getInstance()->getNumOfFields() / 2);
+        result = getMinMaxMove( -Board::getInstance()->getNumOfFields() / 2, Board::getInstance()->getNumOfFields() / 2);
+        return result.second;
         // return getMinMaxMove( -1, 1);
         break;
     case 3:
@@ -72,99 +73,90 @@ int Bot::getRandomMove() {
         return getRandomMove();
 }
 
-int Bot::getMinMaxMove(int alpha, int beta) {
-
-    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
-    // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-        if( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) && Board::getInstance()->checkWin(Board::getInstance()->getColumnOrder(i), Board::getInstance()->getFreeRowInColumn(Board::getInstance()->getColumnOrder(i)), Board::getInstance()->getPlayerToMove()))
-            return Board::getInstance()->getColumnOrder(i);
-    }
-
-    int columnOfBestScore = -1;
-
-    // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
-    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
-        if ( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) ) {
-            play(Board::getInstance()->getColumnOrder(i));
-            int newScore = -getMinMaxScore(-beta, -alpha);
-            if ( newScore > alpha) {
-                alpha = newScore;
-                columnOfBestScore = Board::getInstance()->getColumnOrder(i);
-            }
-            undoPlay(Board::getInstance()->getColumnOrder(i));
-
-            std::cout<<"column: "<<Board::getInstance()->getColumnOrder(i)<<", score: "<<newScore<<std::endl;
-            std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
-        }
-
-    }
-    return columnOfBestScore;
-}
-
-int Bot::getMinMaxScore(int alpha, int beta) {
-    if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
-        PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
-        int score = Board::getInstance()->getScoreFromMap(curHash);
-        if ( score != 99999) {
-            return score;
-        }
-    }
-    if (Board::getInstance()->getAllMovesCounter() % 1000000 == 0)
+std::pair<int, int> Bot::getMinMaxMove(int alpha, int beta) {
+    searchDepth++;
+    // if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
+    //     PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+    //     int score = Board::getInstance()->getScoreFromMap(curHash);
+    //     if ( score != 99999) {
+    //         searchDepth--;
+    //         return std::make_pair(score, -1);
+    //     }
+    // }
+    if (Board::getInstance()->getAllMovesCounter() % 10000000 == 0)
         std::cout<<"all counter: "<< Board::getInstance()->getAllMovesCounter()<<std::endl;
     if (Board::getInstance()->checkDraw() ) {
-        return 0;
+        searchDepth--;
+        return std::make_pair(0, -2);
     }
 
-
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
-    // for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) && Board::getInstance()->checkWin(Board::getInstance()->getColumnOrder(i), Board::getInstance()->getFreeRowInColumn(Board::getInstance()->getColumnOrder(i)), Board::getInstance()->getPlayerToMove())) {
-            return (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
+            searchDepth--;
+            return std::make_pair((Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2, Board::getInstance()->getColumnOrder(i));
         }
-
     }
 
     int max = (Board::getInstance()->getNumOfFields() + 1 - Board::getInstance()->getMovesCounter()) / 2;
     if (beta > max) {
         beta = max;
         if (alpha >= beta) {
-            return beta;
+            searchDepth--;
+            return std::make_pair(beta, -1);
         }
     }
+
+    int columnOfBestScore = -1;
 
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
-    //for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
         if ( Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i)) ) {
             play(Board::getInstance()->getColumnOrder(i));
-            if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
-                PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
-                int score = Board::getInstance()->getScoreFromMap(curHash);
-                if ( score != 99999) {
-                    undoPlay(Board::getInstance()->getColumnOrder(i));
-                    return score;
-                }
-            }
-            int newScore = -getMinMaxScore(-beta, -alpha);
-            if ( newScore >= beta) {
-                if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
-                    PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
-                    if (!Board::getInstance()->checkHashInMap(curHash))
-                        Board::getInstance()->addHashToMap(curHash, newScore);
-                }
+            // if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
+            //     PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+            //     int score = Board::getInstance()->getScoreFromMap(curHash);
+            //     if ( score != 99999) {
+            //         undoPlay(Board::getInstance()->getColumnOrder(i));
+            //         searchDepth--;
+            //         return std::make_pair(score, Board::getInstance()->getColumnOrder(i));
+            //     }
+            // }
+            std::pair<int, int> newScoreAndColumn = getMinMaxMove(-beta, -alpha);
+            newScoreAndColumn.first *= -1;
+            if ( newScoreAndColumn.first >= beta) {
+                // if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
+                //     PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+                //     if (!Board::getInstance()->checkHashInMap(curHash))
+                //         Board::getInstance()->addHashToMap(curHash, newScoreAndColumn.first);
+                // }
                 undoPlay(Board::getInstance()->getColumnOrder(i));
-                return newScore;
+                if (searchDepth == 1) {
+                    std::cout<<"column: "<<Board::getInstance()->getColumnOrder(i)<<", score: "<<newScoreAndColumn.first<<std::endl;
+                    std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
+                }
+                searchDepth--;
+                return std::make_pair(newScoreAndColumn.first, Board::getInstance()->getColumnOrder(i));
+
             }
-            if ( newScore > alpha) alpha = newScore;
+            if ( newScoreAndColumn.first > alpha) {
+                alpha = newScoreAndColumn.first;
+                columnOfBestScore = Board::getInstance()->getColumnOrder(i);
+            }
 
             undoPlay(Board::getInstance()->getColumnOrder(i));
+            if (searchDepth == 1) {
+                std::cout<<"column: "<<Board::getInstance()->getColumnOrder(i)<<", score: "<<alpha<<std::endl;
+                std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
+            }
+
         }
     }
-    if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
-        PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
-        if (!Board::getInstance()->checkHashInMap(curHash))
-            Board::getInstance()->addHashToMap(curHash, alpha);
-    }
-    return alpha;
+    // if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE) {
+    //     PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
+    //     if (!Board::getInstance()->checkHashInMap(curHash))
+    //         Board::getInstance()->addHashToMap(curHash, alpha);
+    // }
+    searchDepth--;
+    return std::make_pair(alpha, columnOfBestScore);
 }
 
 void Bot::wait() {
