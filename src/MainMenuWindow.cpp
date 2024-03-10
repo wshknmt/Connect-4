@@ -27,18 +27,16 @@ void MainMenuWindow::on_startButtonPvP_clicked() {
     openBoardWindow(0);
 }
 
-void MainMenuWindow::on_startButtonPvCRand_clicked() {
-    openBoardWindow(1);
+void MainMenuWindow::on_startButtonPvC_clicked() {
+    ChooseBotWindow *cw = new ChooseBotWindow();
+    cw->show();
+    this->hide();
 }
 
-void MainMenuWindow::on_startButtonPvCMinMax_clicked() {
-    openBoardWindow(2);
+
+void MainMenuWindow::on_startButtonCvC_clicked() {
+    CustomBotWindow *cw = new CustomBotWindow();
+    cw->show();
+    this->hide();
 }
 
-void MainMenuWindow::on_startButtonPvCSingleHeuristic_clicked() {
-    openBoardWindow(3);
-}
-
-void MainMenuWindow::on_startButtonPvCHeuristic_clicked() {
-    openBoardWindow(4);
-}

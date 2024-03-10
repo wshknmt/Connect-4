@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/Connect_4_game_logo.png</file>
+    </qresource>
+</RCC>

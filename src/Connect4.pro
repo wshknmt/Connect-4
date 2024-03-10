@@ -12,6 +12,8 @@ SOURCES += \
     Board.cpp \
     Bot.cpp \
     MainMenuWindow.cpp \
+    ChooseBotWindow.cpp \
+    CustomBotWindow.cpp \
     main.cpp \
     BoardWindow.cpp \
     PairInt64.cpp
@@ -21,10 +23,14 @@ HEADERS += \
     BoardWindow.h \
     Bot.h \
     MainMenuWindow.h \
+    ChooseBotWindow.h \
+    CustomBotWindow.h \
     debug.h \
     PairInt64.h
 
 FORMS += \
+    forms/CustomBotWindow.ui \
+    forms/ChooseBotWindow.ui \
     forms/BoardWindow.ui \
     forms/MainMenuWindow.ui
 
@@ -35,4 +41,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES +=
 
-RESOURCES +=
+RESOURCES += \
+    ../resources.qrc

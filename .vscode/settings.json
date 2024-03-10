@@ -80,5 +80,6 @@
         "filesystem": "cpp",
         "bitset": "cpp"
     },
-    "cmake.configureOnEdit": false
+    "cmake.configureOnEdit": false,
+    "C_Cpp.errorSquiggles": "disabled"
 }

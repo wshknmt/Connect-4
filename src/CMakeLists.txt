@@ -10,7 +10,12 @@ add_executable(${PROJECT_NAME}
   MainMenuWindow.cpp
   PairInt64.h
   PairInt64.cpp
+  ChooseBotWindow.h
+  ChooseBotWindow.cpp
+  CustomBotWindow.h
+  CustomBotWindow.cpp
   main.cpp
+  ../resources.qrc
 )
 
 if(MSVC)

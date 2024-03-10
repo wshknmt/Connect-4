@@ -2,7 +2,8 @@
 #define MAINMENUWINDOW_H
 
 #include <QMainWindow>
-#include "BoardWindow.h"
+#include "CustomBotWindow.h"
+#include "ChooseBotWindow.h"
 
 namespace Ui {
 class MainMenuWindow;
@@ -21,10 +22,8 @@ private slots:
     void on_exitButton_clicked();
     void openBoardWindow(int gameMode);
     void on_startButtonPvP_clicked();
-    void on_startButtonPvCRand_clicked();
-    void on_startButtonPvCMinMax_clicked();
-    void on_startButtonPvCSingleHeuristic_clicked();
-    void on_startButtonPvCHeuristic_clicked();
+    void on_startButtonPvC_clicked();
+    void on_startButtonCvC_clicked();
 
 private:
     Ui::MainMenuWindow *ui;

@@ -55,7 +55,7 @@ public:
     void checkLineInDirection(int col, int row, int direction, int token);
     int getResults(int player, int col, int row);
 
-    static const int MAX_TEST_COLUMN = 4;
+    static const int MAX_TEST_COLUMN = 7;
     bool LOAD_TRANSPOSITION_TABLE = false;
     bool SAVE_TRANSPOSITION_TABLE = false;
 
