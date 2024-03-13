@@ -15,7 +15,7 @@ add_executable(${PROJECT_NAME}
   CustomBotWindow.h
   CustomBotWindow.cpp
   main.cpp
-  ../resources.qrc
+  resources.qrc
 )
 
 if(MSVC)

@@ -10,11 +10,23 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Customize Bot</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="logoLabel">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -39,7 +51,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="../../resources.qrc">:/resources/Connect_4_game_logo.png</pixmap>
+     <pixmap>:/resources/Connect_4_game_logo.png</pixmap>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -48,7 +60,7 @@
       <x>50</x>
       <y>270</y>
       <width>705</width>
-      <height>171</height>
+      <height>259</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -96,9 +108,30 @@
            </item>
            <item>
             <widget class="QComboBox" name="firstBotCombo">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QComboBox {
+  background-color: #4CAF50;
+  border: 2px solid #3e8e41; 
+  border-radius: 10px;       
+  padding: 5px;              
+  font: bold 16px;           
+  color: white;              
+}
+QComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  width: 25px;               
+}</string>
+             </property>
              <item>
               <property name="text">
-               <string>Perfect Bot</string>
+               <string> </string>
               </property>
              </item>
              <item>
@@ -114,6 +147,11 @@
              <item>
               <property name="text">
                <string>MinMax Heuristic Bot</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Perfect Bot</string>
               </property>
              </item>
             </widget>
@@ -139,9 +177,30 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QComboBox {
+  background-color: #4CAF50;
+  border: 2px solid #3e8e41; 
+  border-radius: 10px;       
+  padding: 5px;              
+  font: bold 16px;           
+  color: white;              
+}
+QComboBox::drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: right;
+  width: 25px;               
+}</string>
+             </property>
              <item>
               <property name="text">
-               <string>Perfect Bot</string>
+               <string> </string>
               </property>
              </item>
              <item>
@@ -159,6 +218,11 @@
                <string>MinMax heuristic Bot</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>Perfect Bot</string>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>
@@ -168,14 +232,55 @@
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>19</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="startButton">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="font">
         <font>
-         <pointsize>20</pointsize>
+         <pointsize>-1</pointsize>
+         <bold>true</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	background-color: #4CAF50;
+	border: none;
+	color: white;
+	padding: 10px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 25px;
+	font-weight: bold;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+QPushButton:hover {
+	background-color: #45a049;
+}
+QPushButton:pressed {
+	background-color: #3e8e41;
+}</string>
        </property>
        <property name="text">
         <string>Start</string>
@@ -197,8 +302,6 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="../../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

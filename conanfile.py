@@ -16,12 +16,13 @@ class Connect4Conan(ConanFile):
         "qt:openssl": False,
         "qt:with_brotli": False,
         "qt:with_harfbuzz" : False,
-        "qt:with_libpng" : False,
+        "qt:with_libpng" : True,
         "qt:with_md4c" : False,
         "qt:with_odbc" : False,
         "qt:with_openal" : False,
         "qt:with_pq" : False,
         "qt:with_sqlite3" : False,
+        "qt:with_libjpeg" : "libjpeg"
     }
     generators = "cmake_find_package", "cmake_paths"
 
@@ -51,7 +52,9 @@ class Connect4Conan(ConanFile):
 
     def imports(self):
         if self.settings.os == "Windows":
-            self.copy("Qt6Widgets*.dll", dst="bin", src="bin", keep_path=False)
-            self.copy("Qt6Core*.dll", dst="bin", src="bin", keep_path=False)
-            self.copy("Qt6Gui*.dll", dst="bin", src="bin", keep_path=False)
-            self.copy("res/archdatadir/plugins/platforms/qwindows*.dll", dst="bin/platforms", src="", keep_path=False)
+            # self.copy("Qt6Widgets*.dll", dst="bin", src="bin", keep_path=False)
+            # self.copy("Qt6Core*.dll", dst="bin", src="bin", keep_path=False)
+            # self.copy("Qt6Gui*.dll", dst="bin", src="bin", keep_path=False)
+            self.copy("*.dll", dst="bin", src="bin", keep_path=False)
+            # self.copy("plugins/imageformats/*", dst="bin", src="bin", keep_path=False)/
+            self.copy("res/archdatadir/plugins/platforms/*.dll", dst="bin/platforms", src="", keep_path=False)
