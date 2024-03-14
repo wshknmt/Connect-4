@@ -79,7 +79,8 @@
         "fstream": "cpp",
         "filesystem": "cpp",
         "bitset": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "qpushbutton": "cpp"
     },
     "cmake.configureOnEdit": false,
     "C_Cpp.errorSquiggles": "disabled"

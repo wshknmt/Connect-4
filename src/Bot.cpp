@@ -33,6 +33,7 @@ void Bot::play(int column) {
     Board::getInstance()->dropTokenToColumn(column, Board::getInstance()->getPlayerToMove());
     Board::getInstance()->changePlayerToMove();
 }
+
 void Bot::undoPlay(int column) {
     Board::getInstance()->changePlayerToMove();
     Board::getInstance()->removeLastTokenFromColumn(column);
@@ -45,21 +46,20 @@ int Bot::getMove() {
         return getRandomMove();
         break;
     case 2:
+        return getHeuristicMove();
+        break;
+    case 3:
+        result = getHeuristicMinMaxMove(6, true);
+        return result.second;
+        break;
+    case 4:
         result = getMinMaxMove( -Board::getInstance()->getNumOfFields() / 2, Board::getInstance()->getNumOfFields() / 2);
         return result.second;
         // return getMinMaxMove( -1, 1);
         break;
-    case 3:
-        return getHeuristicMove();
-        break;
-    case 4:
-        result = getHeuristicMinMaxMove(6, true);
-        return result.second;
-        break;
     default:
         return 999;
     }
-
 }
 
 int Bot::getRandomMove() {

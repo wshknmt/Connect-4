@@ -28,10 +28,15 @@ void CustomBotWindow::on_firstBotCombo_currentIndexChanged(int index) {
     }
 }
 
-
 void CustomBotWindow::on_secondBotCombo_currentIndexChanged(int index) {
     if (index != 0 && ui->firstBotCombo->currentIndex() != 0) ui->startButton->setEnabled(true);
     else ui->startButton->setEnabled(false);
-
 }
 
+void CustomBotWindow::on_startButton_clicked() {
+    BoardWindow *bw = new BoardWindow();
+    bw->setGameMode(2, true, ui->firstBotCombo->currentIndex(), ui->secondBotCombo->currentIndex());
+    bw->show();
+    this->hide();
+    bw->startCvCGame();
+}

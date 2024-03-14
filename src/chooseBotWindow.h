@@ -20,9 +20,9 @@ private slots:
 
     void openBoardWindow(int gameMode);
     void on_startButtonPvCRand_clicked();
-    void on_startButtonPvCMinMax_clicked();
     void on_startButtonPvCSingleHeuristic_clicked();
     void on_startButtonPvCHeuristic_clicked();
+    void on_startButtonPvCMinMax_clicked();
 
 private:
     Ui::ChooseBotWindow *ui;

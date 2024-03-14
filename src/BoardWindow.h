@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include <QImage>
 #include <QPushButton>
+#include <QTimer>
 #include <filesystem>
 #include "Board.h"
 #include "Bot.h"
@@ -30,6 +31,13 @@ public:
     void disableButtons();
     void enableNotFullColumns();
     void resetWindow();
+    void setGameMode(int gameMode, bool playerStart, int firstBot, int secondBot);
+    bool playerTurn(int columnIndex); // return false if end of game
+    bool botTurn(); // return false if end of game
+    void startCvCGame();
+    void changeBot();
+    void makeBotMove();
+    void stopTimer();
 
 private slots:
     void connectSignalsAndSlotsForColumnButtons();
@@ -46,6 +54,13 @@ private:
     Ui::BoardWindow *ui;
     QGraphicsScene *scene;
     std::vector<std::vector<QGraphicsEllipseItem*>> qtBoard;
+    QPushButton *listOfButtons[7];
+    int gameMode; // 0 - PvP, 1 - PvC, 2 - Cvc
+    bool playerStart;
+    int firstBot, secondBot; // 0 - undefined, 1 - random, 2 - naive heur., 3 - minmax heur., 4 - perfect
+    QString botList[5] = {" ", "Random Bot", "Naive heur. Bot", "MinMax heur. Bot", "Perfect Bot"};
+    std::chrono::duration<double> duration;
+    QTimer *gameTimer;
 
 };
 

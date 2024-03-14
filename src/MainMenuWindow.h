@@ -20,7 +20,6 @@ public:
 private slots:
 
     void on_exitButton_clicked();
-    void openBoardWindow(int gameMode);
     void on_startButtonPvP_clicked();
     void on_startButtonPvC_clicked();
     void on_startButtonCvC_clicked();

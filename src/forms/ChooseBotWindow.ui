@@ -283,6 +283,124 @@ QPushButton:pressed {
      </item>
     </layout>
    </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>480</y>
+      <width>701</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QFrame {
+  background-color: rgba(76, 175, 80,1);
+  border: 2px solid rgba(76, 175, 80, 1);
+  border-radius: 10px;
+}</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>0</y>
+       <width>671</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="playerRadio">
+        <property name="maximumSize">
+         <size>
+          <width>288</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QRadioButton {
+    color: white; 
+    font-weight: bold;
+}
+QRadioButton::indicator {
+    background-color: white; 
+}
+QRadioButton::indicator:checked {
+    background-color: black; 
+}</string>
+        </property>
+        <property name="text">
+         <string>Game starts Player</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>11</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="botRadio">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QRadioButton {
+    color: white; 
+    font-weight: bold;
+}
+QRadioButton::indicator {
+    background-color: white; 
+}
+QRadioButton::indicator:checked {
+    background-color: black; 
+}</string>
+        </property>
+        <property name="text">
+         <string>Game starts Bot</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>horizontalSpacer</zorder>
+     <zorder>playerRadio</zorder>
+     <zorder>botRadio</zorder>
+    </widget>
+   </widget>
+   <zorder>frame</zorder>
+   <zorder>logoLabel</zorder>
+   <zorder>verticalLayoutWidget_2</zorder>
+   <zorder>playerRadio</zorder>
+   <zorder>botRadio</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

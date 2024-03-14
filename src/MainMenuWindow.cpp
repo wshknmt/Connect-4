@@ -16,15 +16,11 @@ void MainMenuWindow::on_exitButton_clicked() {
     QApplication::quit();
 }
 
-void MainMenuWindow::openBoardWindow(int gameMode) {
+void MainMenuWindow::on_startButtonPvP_clicked() {
     BoardWindow *bw = new BoardWindow();
-    Bot::getInstance()->setMode(gameMode);
+    bw->setGameMode(0, true, 0, 0);
     bw->show();
     this->hide();
-}
-
-void MainMenuWindow::on_startButtonPvP_clicked() {
-    openBoardWindow(0);
 }
 
 void MainMenuWindow::on_startButtonPvC_clicked() {
@@ -33,10 +29,8 @@ void MainMenuWindow::on_startButtonPvC_clicked() {
     this->hide();
 }
 
-
 void MainMenuWindow::on_startButtonCvC_clicked() {
     CustomBotWindow *cw = new CustomBotWindow();
     cw->show();
     this->hide();
 }
-

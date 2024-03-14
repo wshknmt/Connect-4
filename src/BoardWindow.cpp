@@ -27,13 +27,21 @@ BoardWindow::BoardWindow(QWidget *parent)
         qtBoard.push_back(rectV);
     }
 
-    ui->column0Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
-    ui->column1Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
-    ui->column2Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
-    ui->column3Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
-    ui->column4Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
-    ui->column5Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
-    ui->column6Button->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    listOfButtons[0] = ui->column0Button;
+    listOfButtons[1] = ui->column1Button;
+    listOfButtons[2] = ui->column2Button;
+    listOfButtons[3] = ui->column3Button;
+    listOfButtons[4] = ui->column4Button;
+    listOfButtons[5] = ui->column5Button;
+    listOfButtons[6] = ui->column6Button;
+
+    for(int i = 0; i < 7; i++) {
+        listOfButtons[i]->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
+    }
+
+    disableButtons();
+    resetWindow();
+
     if (Board::getInstance()->LOAD_TRANSPOSITION_TABLE)
         Board::getInstance()->loadTranspositionTableFromFile();
 }
@@ -74,36 +82,26 @@ void BoardWindow::refreshWindow() {
 }
 
 void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex) {
-    Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->getPlayerToMove());
-    disableButtons();
-    refreshWindow();
-    if(checkWinOnBoard(columnIndex) || checkDrawOnBoard())
-        return;
-    Board::getInstance()->changePlayerToMove();
 
-    auto start = std::chrono::high_resolution_clock::now();
-
-    if (Bot::getInstance()->getMode() != 0) {
-        int botMove = Bot::getInstance()->botTurn();
-        if(checkWinOnBoard(botMove) || checkDrawOnBoard()) {
-            if (checkDrawOnBoard()) refreshWindow();
-            return;
-        }
-        refreshWindow();
-        enableNotFullColumns();
-        Board::getInstance()->changePlayerToMove();
-    } else if (Bot::getInstance()->getMode() == 0) {
-        enableNotFullColumns();
+    switch(gameMode) {
+    case 0:
+        if (playerTurn(columnIndex) == false) return;
+        break;
+    case 1:
+        if (playerTurn(columnIndex) == false) return;
+        auto start = std::chrono::high_resolution_clock::now();
+        if (botTurn() == false) return;
+        auto end = std::chrono::high_resolution_clock::now();
+        duration = end - start;
+        break;
     }
-    Board::getInstance()->print();
+    enableNotFullColumns();
+
     ui->undoButton->setEnabled(true);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
     std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
     Board::getInstance()->printTotalHashTime();
     Board::getInstance()->printTotalSearchTime();
-
 }
 
 bool BoardWindow::checkWinOnBoard(int columnIndex) {
@@ -141,6 +139,62 @@ bool BoardWindow::checkDrawOnBoard() {
     return false;
 }
 
+bool BoardWindow::playerTurn(int columnIndex) {
+    Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->getPlayerToMove());
+    disableButtons();
+    refreshWindow();
+    if(checkWinOnBoard(columnIndex) || checkDrawOnBoard())
+        return false;
+    Board::getInstance()->changePlayerToMove();
+    return true;
+}
+
+bool BoardWindow::botTurn() {
+    int botMove = Bot::getInstance()->botTurn();
+    if(checkWinOnBoard(botMove) || checkDrawOnBoard()) {
+        if (checkDrawOnBoard()) refreshWindow();
+        return false;
+    }
+    refreshWindow();
+    Board::getInstance()->changePlayerToMove();
+    return true;
+}
+
+void BoardWindow::startCvCGame() {
+    ui->undoButton->setEnabled(false);
+    gameTimer = new QTimer(this);
+    connect(gameTimer, &QTimer::timeout, this, &BoardWindow::makeBotMove);
+    gameTimer->start(100);
+}
+
+void BoardWindow::makeBotMove() {
+    static bool isBotMoving = false;
+    if (!isBotMoving) {
+        isBotMoving = true;
+        if (botTurn() == false) {
+            gameTimer->stop();
+            gameTimer->deleteLater();
+            isBotMoving = false;
+            return;
+        }
+        changeBot();
+        isBotMoving = false;
+    }
+}
+
+void BoardWindow::stopTimer() {
+    QTimer *timer = qobject_cast<QTimer *>(sender());
+    if (timer) {
+        timer->stop();
+        timer->deleteLater();
+    }
+}
+
+void BoardWindow::changeBot() {
+    if(Bot::getInstance()->getMode() == firstBot) Bot::getInstance()->setMode(secondBot);
+    else Bot::getInstance()->setMode(firstBot);
+}
+
 void BoardWindow::on_exitButton_clicked() {
     if (Board::getInstance()->SAVE_TRANSPOSITION_TABLE)
         Board::getInstance()->saveTranspositionTableToFile();
@@ -148,36 +202,23 @@ void BoardWindow::on_exitButton_clicked() {
 }
 
 void BoardWindow::disableButtons() {
-    ui->column0Button->setEnabled(false);
-    ui->column1Button->setEnabled(false);
-    ui->column2Button->setEnabled(false);
-    ui->column3Button->setEnabled(false);
-    ui->column4Button->setEnabled(false);
-    ui->column5Button->setEnabled(false);
-    ui->column6Button->setEnabled(false);
+    for(int i = 0; i < 7; i++) {
+        listOfButtons[i]->setEnabled(false);
+    }
 }
 
 void BoardWindow::enableNotFullColumns() {
     if (endOfGame) return;
-    if (Board::getInstance()->isColumnFree(0)) ui->column0Button->setEnabled(true);
-    if (Board::getInstance()->isColumnFree(1)) ui->column1Button->setEnabled(true);
-    if (Board::getInstance()->isColumnFree(2)) ui->column2Button->setEnabled(true);
-    if (Board::getInstance()->isColumnFree(3)) ui->column3Button->setEnabled(true);
-    if (Board::getInstance()->isColumnFree(4)) ui->column4Button->setEnabled(true);
-    if (Board::getInstance()->isColumnFree(5)) ui->column5Button->setEnabled(true);
-    if (Board::getInstance()->isColumnFree(6)) ui->column6Button->setEnabled(true);
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
+        if (Board::getInstance()->isColumnFree(i)) listOfButtons[i]->setEnabled(true);
+    }
 }
 
 void BoardWindow::resetWindow() {
     Board::getInstance()->resetBoard();
-//    Bot::getInstance()->resetBot();
-    ui->column0Button->setEnabled(true);
-    ui->column1Button->setEnabled(true);
-    ui->column2Button->setEnabled(true);
-    ui->column3Button->setEnabled(true);
-    ui->column4Button->setEnabled(true);
-    ui->column5Button->setEnabled(true);
-    ui->column6Button->setEnabled(true);
+    for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
+        listOfButtons[i]->setEnabled(true);
+    }
     ui->resultLabel->setText("");
     endOfGame = false;
 }
@@ -185,6 +226,16 @@ void BoardWindow::resetWindow() {
 void BoardWindow::on_newGameButton_clicked() {
     resetWindow();
     refreshWindow();
+    switch(gameMode) {
+    case 1:
+        if (!playerStart) {
+            botTurn();
+        }
+        break;
+    case 2:
+        startCvCGame();
+        break;
+    }
 }
 
 void BoardWindow::on_undoButton_clicked() {
@@ -192,4 +243,33 @@ void BoardWindow::on_undoButton_clicked() {
     Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->getLastColumn());
     ui->undoButton->setEnabled(false);
     refreshWindow();
+}
+
+void BoardWindow::setGameMode(int gameMode, bool playerStart, int firstBot, int secondBot) {
+    this->gameMode = gameMode;
+    this->playerStart = playerStart;
+    this->firstBot = firstBot;
+    this->secondBot = secondBot;
+    Bot::getInstance()->setMode(firstBot);
+
+    switch(gameMode) {
+    case 0:
+        ui->redLabel->setText("Player 1");
+        ui->blueLabel->setText("Player 2");
+        break;
+    case 1:
+        if (playerStart) {
+            ui->redLabel->setText("Player");
+            ui->blueLabel->setText("Bot");
+        } else {
+            ui->redLabel->setText("Bot");
+            ui->blueLabel->setText("Player");
+        }
+        break;
+    case 2:
+        ui->redLabel->setText(botList[firstBot]);
+        ui->blueLabel->setText(botList[secondBot]);
+        disableButtons();
+        break;
+    }
 }

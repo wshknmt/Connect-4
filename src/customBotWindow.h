@@ -19,6 +19,7 @@ public:
 private slots:
     void on_firstBotCombo_currentIndexChanged(int index);
     void on_secondBotCombo_currentIndexChanged(int index);
+    void on_startButton_clicked();
 
 private:
     Ui::CustomBotWindow *ui;
