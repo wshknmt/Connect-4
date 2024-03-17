@@ -11,6 +11,7 @@
 #include <bitset>
 
 #include "PairInt64.h"
+#include "GameCustomization.h"
 
 class Board
 {
@@ -29,6 +30,7 @@ public:
     bool checkWin(int col, int row, int token);
     void checkDirection(int col, int row, int direction, int token);
     int getPlayerToMove();
+    void setPlayerToMove(int player);
     int getNextPlayerToMove();
     void changePlayerToMove();
     int getFreeRowInColumn(int col);
@@ -54,6 +56,13 @@ public:
     int getPointResult(int player);
     void checkLineInDirection(int col, int row, int direction, int token);
     int getResults(int player, int col, int row);
+    GameCustomization loadFile(std::ifstream& file);
+    bool validateMode(char mode);
+    bool validatePlayers(char p1, char p2, int gameMode);
+    bool validateField(char field);
+    bool validateTokenAmount(int amountP1, int amountP2);
+    bool validateBoardStructure();
+    bool isTokenInField(int j, int i);
 
     static const int MAX_TEST_COLUMN = 7;
     bool LOAD_TRANSPOSITION_TABLE = false;
@@ -80,6 +89,7 @@ private:
     std::unordered_map <PairInt64, int> transpositionTable;
     int columnOrder[MAX_TEST_COLUMN];
     int weights[5] = {0, 1, 10, 50, 500};
+    std::string message;
 
 };
 

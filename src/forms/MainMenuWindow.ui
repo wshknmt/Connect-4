@@ -29,19 +29,22 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>250</y>
+      <x>80</x>
+      <y>260</y>
       <width>660</width>
-      <height>260</height>
+      <height>291</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
      <item>
-      <widget class="QPushButton" name="startButtonPvP">
+      <widget class="QPushButton" name="loadButton">
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>60</height>
+         <height>58</height>
         </size>
        </property>
        <property name="font">
@@ -55,16 +58,59 @@
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
+    min-height: 30px;
+    max-height: 30px;
 	background-color: #4CAF50;
 	border: none;
 	color: white;
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	margin: 4px 2px;
-	cursor: pointer;
+	border-radius: 10px;
+}
+QPushButton:hover {
+	background-color: #45a049;
+}
+QPushButton:pressed {
+	background-color: #3e8e41;
+}</string>
+       </property>
+       <property name="text">
+        <string>Load game</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="startButtonPvP">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>58</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+         <italic>false</italic>
+         <bold>true</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    min-height: 30px;
+    max-height: 30px;
+	background-color: #4CAF50;
+	border: none;
+	color: white;
+	padding: 10px 32px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 25px;
+	margin: 4px 2px;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -84,7 +130,7 @@ QPushButton:pressed {
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>60</height>
+         <height>58</height>
         </size>
        </property>
        <property name="font">
@@ -98,16 +144,16 @@ QPushButton:pressed {
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
+    min-height: 30px;
+    max-height: 30px;
 	background-color: #4CAF50;
 	border: none;
 	color: white;
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -127,7 +173,7 @@ QPushButton:pressed {
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>60</height>
+         <height>58</height>
         </size>
        </property>
        <property name="font">
@@ -140,16 +186,16 @@ QPushButton:pressed {
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
+    min-height: 30px;
+    max-height: 30px;
 	background-color: #4CAF50;
 	border: none;
 	color: white;
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -169,7 +215,7 @@ QPushButton:pressed {
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>60</height>
+         <height>58</height>
         </size>
        </property>
        <property name="font">
@@ -183,16 +229,16 @@ QPushButton:pressed {
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
+    min-height: 30px;
+    max-height: 30px;
 	background-color: #4CAF50;
 	border: none;
 	color: white;
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {

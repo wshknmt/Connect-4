@@ -15,7 +15,7 @@ ChooseBotWindow::~ChooseBotWindow() {
 
 void ChooseBotWindow::openBoardWindow(int bot) {
     BoardWindow *bw = new BoardWindow();
-    bw->setGameMode(1, ui->playerRadio->isChecked(), bot, 0);
+    bw->setGameMode(1, ui->playerRadio->isChecked(), bot, 0, false);
     bw->show();
     this->hide();
     if (!ui->playerRadio->isChecked()) bw->botTurn();

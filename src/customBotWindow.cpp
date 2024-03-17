@@ -35,7 +35,7 @@ void CustomBotWindow::on_secondBotCombo_currentIndexChanged(int index) {
 
 void CustomBotWindow::on_startButton_clicked() {
     BoardWindow *bw = new BoardWindow();
-    bw->setGameMode(2, true, ui->firstBotCombo->currentIndex(), ui->secondBotCombo->currentIndex());
+    bw->setGameMode(2, true, ui->firstBotCombo->currentIndex(), ui->secondBotCombo->currentIndex(), false);
     bw->show();
     this->hide();
     bw->startCvCGame();

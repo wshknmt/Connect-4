@@ -215,7 +215,7 @@ void BoardWindow::enableNotFullColumns() {
 }
 
 void BoardWindow::resetWindow() {
-    Board::getInstance()->resetBoard();
+    if (!loaded) Board::getInstance()->resetBoard();
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
         listOfButtons[i]->setEnabled(true);
     }
@@ -224,6 +224,7 @@ void BoardWindow::resetWindow() {
 }
 
 void BoardWindow::on_newGameButton_clicked() {
+    loaded = false;
     resetWindow();
     refreshWindow();
     switch(gameMode) {
@@ -233,6 +234,7 @@ void BoardWindow::on_newGameButton_clicked() {
         }
         break;
     case 2:
+        Bot::getInstance()->setMode(firstBot);
         startCvCGame();
         break;
     }
@@ -245,11 +247,12 @@ void BoardWindow::on_undoButton_clicked() {
     refreshWindow();
 }
 
-void BoardWindow::setGameMode(int gameMode, bool playerStart, int firstBot, int secondBot) {
+void BoardWindow::setGameMode(int gameMode, bool playerStart, int firstBot, int secondBot, bool loaded) {
     this->gameMode = gameMode;
     this->playerStart = playerStart;
     this->firstBot = firstBot;
     this->secondBot = secondBot;
+    this->loaded = loaded;
     Bot::getInstance()->setMode(firstBot);
 
     switch(gameMode) {
@@ -273,3 +276,45 @@ void BoardWindow::setGameMode(int gameMode, bool playerStart, int firstBot, int 
         break;
     }
 }
+void BoardWindow::on_exportButton_clicked() {
+    std::filesystem::path currentPath = std::filesystem::current_path();
+    std::filesystem::path targetPath = currentPath.parent_path().parent_path().parent_path();
+    targetPath = targetPath / "saves";
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Board to file"),  QString::fromStdString(targetPath.string()),tr("Connect Four files (*.c4)"));
+    if (!fileName.isEmpty()) {
+        std::ofstream file(fileName.toStdString());
+        if (file.is_open()) {
+            file<<"MODE: 0 - PvP, 1 - PvC, 2 - CvC, PLAYER: 0 - Human, 1 - Random Bot, 2 - Naive heur. Bot, 3 - MinMax heur. Bot, 4 - Perfect Bot"<<std::endl;
+            file<<"MODE,PLAYER1,PLAYER2"<<std::endl;
+
+            switch(gameMode) {
+            case 0:
+                file<<"0,0,0"<<std::endl;
+                break;
+            case 1:
+                if (playerStart) {
+                    file<<"1,0,"<<firstBot<<std::endl;
+                } else {
+                    file<<"1,"<<firstBot<<",0"<<std::endl;
+                }
+                break;
+            case 2:
+                file<<"2,"<<firstBot<<","<<secondBot<<std::endl;
+                break;
+            }
+
+            for (int i = 0; i < Board::getInstance()->getHeight(); i++) {
+                for (int j = 0; j < Board::getInstance()->getWidth(); j++) {
+                    file << Board::getInstance()->getFields()[i][j] << ",";
+                }
+                file<<std::endl;
+            }
+            file.close();
+            std::cout << "Data saved to " << fileName.toStdString() << std::endl;
+        } else {
+            std::cerr << "Unable to save file: " << fileName.toStdString() << std::endl;
+        }
+    }
+}
+

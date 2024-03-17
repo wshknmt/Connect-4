@@ -9,6 +9,7 @@
 #include <QImage>
 #include <QPushButton>
 #include <QTimer>
+#include <QFileDialog>
 #include <filesystem>
 #include "Board.h"
 #include "Bot.h"
@@ -31,7 +32,7 @@ public:
     void disableButtons();
     void enableNotFullColumns();
     void resetWindow();
-    void setGameMode(int gameMode, bool playerStart, int firstBot, int secondBot);
+    void setGameMode(int gameMode, bool playerStart, int firstBot, int secondBot, bool loaded);
     bool playerTurn(int columnIndex); // return false if end of game
     bool botTurn(); // return false if end of game
     void startCvCGame();
@@ -44,6 +45,7 @@ private slots:
     void on_exitButton_clicked();
     void on_newGameButton_clicked();
     void on_undoButton_clicked();
+    void on_exportButton_clicked();
 
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
@@ -58,6 +60,7 @@ private:
     int gameMode; // 0 - PvP, 1 - PvC, 2 - Cvc
     bool playerStart;
     int firstBot, secondBot; // 0 - undefined, 1 - random, 2 - naive heur., 3 - minmax heur., 4 - perfect
+    bool loaded; // true - loaded game from file, false - new game
     QString botList[5] = {" ", "Random Bot", "Naive heur. Bot", "MinMax heur. Bot", "Perfect Bot"};
     std::chrono::duration<double> duration;
     QTimer *gameTimer;

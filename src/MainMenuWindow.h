@@ -2,6 +2,7 @@
 #define MAINMENUWINDOW_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 #include "CustomBotWindow.h"
 #include "ChooseBotWindow.h"
 
@@ -23,6 +24,11 @@ private slots:
     void on_startButtonPvP_clicked();
     void on_startButtonPvC_clicked();
     void on_startButtonCvC_clicked();
+    void on_loadButton_clicked();
+
+private:
+    void showErrorMessageBox(const QString& errorMessage);
+    void startLoadedGame(GameCustomization customGame);
 
 private:
     Ui::MainMenuWindow *ui;

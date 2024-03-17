@@ -125,6 +125,10 @@ int Board::getPlayerToMove() {
     return playerToMove;
 }
 
+void Board::setPlayerToMove(int player) {
+    playerToMove = player;
+}
+
 int Board::getNextPlayerToMove() {
     return playerToMove % 2 + 1;
 }
@@ -344,4 +348,154 @@ void Board::checkLineInDirection(int col, int row, int direction, int token) {
         allLineCounter++;
         checkLineInDirection(col + directions[direction][0], row + directions[direction][1], direction, token);
     }
+}
+
+GameCustomization Board::loadFile(std::ifstream& file) {
+    GameCustomization gameCustomization;
+    resetBoard();
+    std::string line;
+    std::getline(file, line);
+    std::getline(file, line);
+    std::getline(file, line);
+
+    if (validateMode(line[0])) {
+        gameCustomization.gameMode = line[0] - '0';
+    } else {
+        gameCustomization.message = message;
+        return gameCustomization;
+    }
+    if (validatePlayers(line[2], line[4], gameCustomization.gameMode)) {
+        gameCustomization.player1 = line[2] - '0';
+        gameCustomization.player2 = line[4] - '0';
+    } else {
+        gameCustomization.message = message;
+        return gameCustomization;
+    }
+
+    for (int i = 0; i < Board::getInstance()->getHeight(); i++) {
+        std::getline(file, line);
+        for (int j = 0; j < Board::getInstance()->getWidth(); j++) {
+            if ( validateField(line[2*j]) ) {
+                int field = line[2*j] - '0';
+                fields[i][j] = field;
+                if (field == 1 ) gameCustomization.p1Counter++;
+                else if(field == 2) gameCustomization.p2Counter++;
+            } else {
+                gameCustomization.message = message;
+                return gameCustomization;
+            }
+        }
+    }
+
+    if (!validateTokenAmount(gameCustomization.p1Counter, gameCustomization.p2Counter)) {
+        gameCustomization.message = message;
+        return gameCustomization;
+    }
+
+    if (!validateBoardStructure()) {
+        gameCustomization.message = message;
+        return gameCustomization;
+    }
+    return gameCustomization;
+}
+
+bool Board::validateMode(char mode) {
+    int num;
+    if ( std::isdigit(mode) ) num = mode - '0';
+    else {
+        message = "Game mode is incorrect";
+        return false;
+    }
+    if (num < 0 || num > 2) {
+        message = "Game mode is incorrect";
+        return false;
+    }
+    return true;
+}
+
+bool Board::validatePlayers(char p1, char p2, int gameMode) {
+    int num1, num2;
+    if ( !std::isdigit(p1) || !std::isdigit(p2) ) {
+        message = "Player is incorrect";
+        return false;
+    } else {
+        num1 = p1 - '0';
+        num2 = p2 - '0';
+    }
+    if ( num1 < 0 || num2 < 0 || num1 > 4 || num2 > 4) {
+        message = "Player is incorrect";
+        return false;
+    }
+    switch(gameMode) {
+        case 0:
+            if (num1 != 0 || num2 != 0) {
+                message = "Incorrect players in this game mode";
+                return false;
+            }
+            break;
+        case 1:
+            if ( ( num1 == 0 && num2 == 0 ) || ( num1 != 0 && num2 != 0 ) ) {
+                message = "Incorrect players in this game mode";
+                return false;
+            }
+            break;
+        case 2:
+            if (num1 == 0 && num2 == 0) {
+                message = "Incorrect players in this game mode";
+                return false;
+            }
+            break;
+    }
+    return true;
+}
+
+bool Board::validateField(char field) {
+    int num;
+    if ( std::isdigit(field) ) num = field - '0';
+    else {
+        message = "Board field is incorrect";
+        return false;
+    }
+    if (num < 0 || num > 2) {
+        message = "Board field is incorrect";
+        return false;
+    }
+    return true;
+}
+
+bool Board::validateTokenAmount(int amountP1, int amountP2) {
+    if ( (amountP1 == amountP2) || (amountP1 == amountP2 + 1) ) {
+        return true;
+    } else {
+        message = "Players tokens amount is incorrect";
+        return false;
+    }
+}
+
+bool Board::validateBoardStructure() {
+    bool tokenPrediction;
+    for (int i = 0; i < Board::getInstance()->getWidth(); i++) {
+        tokenPrediction = true;
+        for (int j = (Board::getInstance()->getHeight() - 1); j >=0 ; j--) {
+            if (isTokenInField(j, i)) {
+                if (tokenPrediction) {
+                    columnOccupancy[i]++;
+                    movesCounter++;
+                    allMovesCounter++;
+                } else {
+                    message = "Board structure is incorrect";
+                    return false;
+                }
+            } else {
+                if (tokenPrediction) {
+                    tokenPrediction = false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool Board::isTokenInField(int j, int i) {
+    return fields[j][i] == 1 || fields[j][i] == 2;
 }

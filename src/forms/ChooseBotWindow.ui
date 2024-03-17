@@ -116,11 +116,9 @@
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	font-weight: bold;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -162,11 +160,9 @@ QPushButton:pressed {
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	font-weight: bold;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -212,11 +208,9 @@ QPushButton:pressed {
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	font-weight: bold;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -258,11 +252,9 @@ QPushButton:pressed {
 	padding: 10px 32px;
 	text-align: center;
 	text-decoration: none;
-	display: inline-block;
 	font-size: 25px;
 	font-weight: bold;
 	margin: 4px 2px;
-	cursor: pointer;
 	border-radius: 10px;
 }
 QPushButton:hover {
@@ -331,14 +323,14 @@ QPushButton:pressed {
         </property>
         <property name="styleSheet">
          <string notr="true">QRadioButton {
-    color: white; 
+    color: white;
     font-weight: bold;
 }
 QRadioButton::indicator {
-    background-color: white; 
+    background-color: white;
 }
 QRadioButton::indicator:checked {
-    background-color: black; 
+    background-color: black;
 }</string>
         </property>
         <property name="text">
@@ -375,14 +367,14 @@ QRadioButton::indicator:checked {
         </property>
         <property name="styleSheet">
          <string notr="true">QRadioButton {
-    color: white; 
+    color: white;
     font-weight: bold;
 }
 QRadioButton::indicator {
-    background-color: white; 
+    background-color: white;
 }
 QRadioButton::indicator:checked {
-    background-color: black; 
+    background-color: black;
 }</string>
         </property>
         <property name="text">
