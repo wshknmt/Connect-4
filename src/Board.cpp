@@ -308,7 +308,7 @@ void Board::printTranspositionTable() {
     }
 }
 
-int Board::getPointResult(int player){
+int Board::getPointResult(int player) {
     int points = 0;
     for (unsigned int row = 0; row < HEIGHT; row++) {
         for (unsigned int col = 0; col < MAX_TEST_COLUMN; col++) {
@@ -498,4 +498,22 @@ bool Board::validateBoardStructure() {
 
 bool Board::isTokenInField(int j, int i) {
     return fields[j][i] == 1 || fields[j][i] == 2;
+}
+
+void Board::addElementToMovesHistory(int value) {
+    movesHistory.push_back(value);
+}
+
+int Board::popBackMovesHistory() {
+    int lastElement = movesHistory.back();
+    movesHistory.pop_back();
+    return lastElement;
+}
+
+int Board::movesHistorySize() {
+    return movesHistory.size();
+}
+
+void Board::clearHistorySize() {
+    movesHistory.clear();
 }

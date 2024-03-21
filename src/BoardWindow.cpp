@@ -83,6 +83,7 @@ void BoardWindow::refreshWindow() {
 
 void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnIndex) {
 
+    ui->undoButton->setEnabled(false);
     switch(gameMode) {
     case 0:
         if (playerTurn(columnIndex) == false) return;
@@ -96,7 +97,7 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
         break;
     }
     enableNotFullColumns();
-
+    playerTurnLabel();
     ui->undoButton->setEnabled(true);
 
     std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
@@ -104,25 +105,30 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
     Board::getInstance()->printTotalSearchTime();
 }
 
+void BoardWindow::playerTurnLabel() {
+    if (gameMode == 0) {
+        if (Board::getInstance()->getPlayerToMove() == 1)
+            ui->resultLabel->setText("Player 1 turn");
+        else ui->resultLabel->setText("Player 2 turn");
+    } else ui->resultLabel->setText("Player turn");
+}
+
 bool BoardWindow::checkWinOnBoard(int columnIndex) {
     if (Board::getInstance()->checkWin(columnIndex, Board::getInstance()->getLastDroppedRowInColumn(columnIndex), Board::getInstance()->getPlayerToMove())) {
         endOfGame = true;
+        ui->undoButton->setEnabled(false);
         std::vector <std::pair<int, int>> winPositions = Board::getInstance()->getWinPositions();
         for (int i = 0; i < winPositions.size(); i++) {
-                if (Board::getInstance()->getPlayerToMove() == 1) {
-                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(139,0,0)));
-                    if (Bot::getInstance()->getMode() == 0)
-                        ui->resultLabel->setText("Player 1 won!!!");
-                    else
-                        ui->resultLabel->setText("Player won!!!");
-                }
-                else {
-                    qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,139)));
-                    if (Bot::getInstance()->getMode() == 0)
-                        ui->resultLabel->setText("Player 2 won!!!");
-                    else
-                        ui->resultLabel->setText("Computer won!!!");
-                }
+            if (Board::getInstance()->getPlayerToMove() == 1) {
+                qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(139,0,0)));
+                QString labelText = ui->redLabel->text();
+                ui->resultLabel->setText(labelText + " won !!!");
+            }
+            else {
+                qtBoard[winPositions[i].first][winPositions[i].second]->setBrush(QBrush(QColor(0,0,139)));
+                QString labelText = ui->blueLabel->text();
+                ui->resultLabel->setText(labelText + " won !!!");
+            }
         }
         disableButtons();
         return true;
@@ -141,6 +147,7 @@ bool BoardWindow::checkDrawOnBoard() {
 
 bool BoardWindow::playerTurn(int columnIndex) {
     Board::getInstance()->dropTokenToColumn(columnIndex, Board::getInstance()->getPlayerToMove());
+    Board::getInstance()->addElementToMovesHistory(columnIndex);
     disableButtons();
     refreshWindow();
     if(checkWinOnBoard(columnIndex) || checkDrawOnBoard())
@@ -150,14 +157,29 @@ bool BoardWindow::playerTurn(int columnIndex) {
 }
 
 bool BoardWindow::botTurn() {
+    botThinkingLabel();
     int botMove = Bot::getInstance()->botTurn();
+    Board::getInstance()->addElementToMovesHistory(botMove);
     if(checkWinOnBoard(botMove) || checkDrawOnBoard()) {
         if (checkDrawOnBoard()) refreshWindow();
         return false;
     }
+    if (gameMode != 2) playerTurnLabel();
     refreshWindow();
     Board::getInstance()->changePlayerToMove();
     return true;
+}
+
+void BoardWindow::botThinkingLabel() {
+    if (gameMode == 1) {
+        ui->resultLabel->setText("Bot thinking...");
+    } else {
+        if (Board::getInstance()->getPlayerToMove() == 1) {
+            ui->resultLabel->setText("Red Bot thinking...");
+        } else {
+            ui->resultLabel->setText("Blue bot thinking...");
+        }
+    }
 }
 
 void BoardWindow::startCvCGame() {
@@ -221,6 +243,8 @@ void BoardWindow::resetWindow() {
     }
     ui->resultLabel->setText("");
     endOfGame = false;
+    Board::getInstance()->clearHistorySize();
+    ui->undoButton->setEnabled(false);
 }
 
 void BoardWindow::on_newGameButton_clicked() {
@@ -241,9 +265,22 @@ void BoardWindow::on_newGameButton_clicked() {
 }
 
 void BoardWindow::on_undoButton_clicked() {
-    Board::getInstance()->changePlayerToMove();
-    Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->getLastColumn());
-    ui->undoButton->setEnabled(false);
+
+    switch(gameMode) {
+    case 0:
+        Board::getInstance()->changePlayerToMove();
+        Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->popBackMovesHistory());
+        break;
+    case 1:
+        Board::getInstance()->changePlayerToMove();
+        Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->popBackMovesHistory());
+        Board::getInstance()->changePlayerToMove();
+        Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->popBackMovesHistory());
+        break;
+    }
+
+    if (Board::getInstance()->movesHistorySize() == 0) ui->undoButton->setEnabled(false);
+
     refreshWindow();
 }
 
@@ -273,8 +310,13 @@ void BoardWindow::setGameMode(int gameMode, bool playerStart, int firstBot, int 
         ui->redLabel->setText(botList[firstBot]);
         ui->blueLabel->setText(botList[secondBot]);
         disableButtons();
+        QFont currentFont = ui->resultLabel->font();
+        currentFont.setPointSize(14);
+        ui->resultLabel->setFont(currentFont);
         break;
     }
+
+    if (gameMode != 2) playerTurnLabel();
 }
 void BoardWindow::on_exportButton_clicked() {
     std::filesystem::path currentPath = std::filesystem::current_path();

@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Customize Bot</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/resources/c4icon2.png</normaloff>:/resources/c4icon2.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="logoLabel">
     <property name="geometry">
@@ -51,7 +55,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/resources/Connect_4_game_logo.png</pixmap>
+     <pixmap resource="../resources.qrc">:/resources/Connect_4_game_logo.png</pixmap>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -131,7 +135,7 @@ QComboBox::drop-down {
              </property>
              <item>
               <property name="text">
-               <string> </string>
+               <string/>
               </property>
              </item>
              <item>
@@ -196,11 +200,15 @@ QComboBox::drop-down {
   subcontrol-origin: padding;
   subcontrol-position: right;
   width: 25px;
+}
+QComboBox:disabled {
+    background-color: darkgreen;
+    color: #ccc; 
 }</string>
              </property>
              <item>
               <property name="text">
-               <string> </string>
+               <string/>
               </property>
              </item>
              <item>
@@ -278,6 +286,10 @@ QPushButton:hover {
 }
 QPushButton:pressed {
 	background-color: #3e8e41;
+}
+QPushButton:disabled {
+    background-color: darkgreen;
+    color: #ccc; 
 }</string>
        </property>
        <property name="text">
@@ -300,6 +312,8 @@ QPushButton:pressed {
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

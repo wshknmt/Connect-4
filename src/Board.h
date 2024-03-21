@@ -63,6 +63,10 @@ public:
     bool validateTokenAmount(int amountP1, int amountP2);
     bool validateBoardStructure();
     bool isTokenInField(int j, int i);
+    void addElementToMovesHistory(int value);
+    int popBackMovesHistory();
+    int movesHistorySize();
+    void clearHistorySize();
 
     static const int MAX_TEST_COLUMN = 7;
     bool LOAD_TRANSPOSITION_TABLE = false;
@@ -90,6 +94,7 @@ private:
     int columnOrder[MAX_TEST_COLUMN];
     int weights[5] = {0, 1, 10, 50, 500};
     std::string message;
+    std::vector <int> movesHistory;
 
 };
 

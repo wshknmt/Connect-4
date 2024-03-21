@@ -57,7 +57,7 @@ void MainMenuWindow::on_loadButton_clicked() {
 }
 
 void MainMenuWindow::showErrorMessageBox(const QString& errorMessage) {
-    QMessageBox::critical(nullptr, "Error", errorMessage, QMessageBox::Ok);
+    QMessageBox::critical(this, "Error", errorMessage, QMessageBox::Ok);
 }
 
 void MainMenuWindow::startLoadedGame(GameCustomization customGame) {
@@ -79,6 +79,7 @@ void MainMenuWindow::startLoadedGame(GameCustomization customGame) {
                         this->hide();
                         return;
                     }
+                }
             } else {
                 bw->setGameMode(1, false, customGame.player1, 0, true);
                 if (customGame.p1Counter == customGame.p2Counter) {

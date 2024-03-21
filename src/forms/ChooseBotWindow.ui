@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Choose Bot</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/resources/c4icon2.png</normaloff>:/resources/c4icon2.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="logoLabel">
     <property name="geometry">
@@ -51,7 +55,7 @@
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/resources/Connect_4_game_logo.png</pixmap>
+     <pixmap resource="../resources.qrc">:/resources/Connect_4_game_logo.png</pixmap>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_2">
@@ -297,7 +301,7 @@ QPushButton:pressed {
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>70</x>
@@ -391,8 +395,6 @@ QRadioButton::indicator:checked {
    <zorder>frame</zorder>
    <zorder>logoLabel</zorder>
    <zorder>verticalLayoutWidget_2</zorder>
-   <zorder>playerRadio</zorder>
-   <zorder>botRadio</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -406,6 +408,8 @@ QRadioButton::indicator:checked {
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

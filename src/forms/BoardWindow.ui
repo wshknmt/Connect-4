@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Connect-4</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/resources/c4icon2.png</normaloff>:/resources/c4icon2.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
@@ -281,22 +285,6 @@
       <number>0</number>
      </property>
      <item>
-      <spacer name="horizontalSpacer_12">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>10</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QLabel" name="resultLabel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -526,6 +514,10 @@ QPushButton:hover {
 }
 QPushButton:pressed {
 	background-color: #3e8e41;
+}
+QPushButton:disabled {
+    background-color: darkgreen;
+    color: #ccc; 
 }</string>
        </property>
        <property name="text">
@@ -691,6 +683,8 @@ QPushButton:pressed {
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

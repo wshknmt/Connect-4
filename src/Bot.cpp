@@ -197,7 +197,6 @@ int Bot::getHeuristicMove() {
     return Board::getInstance()->getColumnOrder(bestIndex);
 }
 
-//Nowe podejście MinMax
 std::pair<int, int> Bot::getHeuristicMinMaxMove(int depth, bool maximizingPlayer) {
     if (depth == 0 || Board::getInstance()->checkDraw()) {
         return evaluateHeuristicMinMax();

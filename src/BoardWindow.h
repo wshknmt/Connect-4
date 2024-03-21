@@ -51,6 +51,8 @@ private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);
     bool checkWinOnBoard(int columnIndex);
     bool checkDrawOnBoard();
+    void playerTurnLabel();
+    void botThinkingLabel();
 
     bool endOfGame = false;
     Ui::BoardWindow *ui;

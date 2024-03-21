@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Main Menu</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/resources/c4icon2.png</normaloff>:/resources/c4icon2.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
@@ -32,7 +36,7 @@
       <x>80</x>
       <y>260</y>
       <width>660</width>
-      <height>291</height>
+      <height>300</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -280,7 +284,7 @@ QPushButton:pressed {
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>:/resources/Connect_4_game_logo.png</pixmap>
+     <pixmap resource="../resources.qrc">:/resources/Connect_4_game_logo.png</pixmap>
     </property>
    </widget>
   </widget>
@@ -296,6 +300,8 @@ QPushButton:pressed {
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
