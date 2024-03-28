@@ -68,7 +68,7 @@ public:
     int movesHistorySize();
     void clearHistorySize();
 
-    static const int MAX_TEST_COLUMN = 7;
+    static const int MAX_TEST_COLUMN = 4;
     bool LOAD_TRANSPOSITION_TABLE = false;
     bool SAVE_TRANSPOSITION_TABLE = false;
 

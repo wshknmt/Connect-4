@@ -2,6 +2,8 @@
 #define BOT_H
 
 #include <random>
+#include <algorithm>
+#include <utility>
 #include <QTime>
 #include <QCoreApplication>
 #include <QEventLoop>
@@ -25,6 +27,8 @@ public:
     void play(int column);
     void undoPlay(int column);
     int getHeuristicMove();
+    void printCheckedColumns();
+    void columnInfo(int i, int score);
 
     std::pair<int, int> getHeuristicMinMaxMove(int depth, bool maximizingPlayer);
     std::pair<int, int> evaluateHeuristicMinMax();
@@ -35,6 +39,9 @@ private:
     static Bot* pInstance;
     int mode;
     int searchDepth = 0;
+    int printNum = 1;
+    std::vector<std::pair<int, int>> checkedColumns;
+    bool useTT = true;
 };
 
 #endif // BOT_H

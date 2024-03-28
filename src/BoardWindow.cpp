@@ -100,9 +100,9 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
     playerTurnLabel();
     ui->undoButton->setEnabled(true);
 
-    std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
-    Board::getInstance()->printTotalHashTime();
-    Board::getInstance()->printTotalSearchTime();
+    // std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+    // Board::getInstance()->printTotalHashTime();
+    // Board::getInstance()->printTotalSearchTime();
 }
 
 void BoardWindow::playerTurnLabel() {
