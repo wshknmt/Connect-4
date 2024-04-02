@@ -68,13 +68,16 @@ public:
     int movesHistorySize();
     void clearHistorySize();
 
-    static const int MAX_TEST_COLUMN = 4;
+    static const int MAX_TEST_COLUMN = 5;
     bool LOAD_TRANSPOSITION_TABLE = false;
     bool SAVE_TRANSPOSITION_TABLE = false;
 
-private:
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
+    static constexpr int MIN_SCORE = -(WIDTH * HEIGHT) / 2 + 3;
+    static constexpr int MAX_SCORE =  (WIDTH * HEIGHT + 1) / 2 - 3;
+
+private:
     int directions[8][2] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};
     int playerToMove = 1;
     int movesCounter = 0;
