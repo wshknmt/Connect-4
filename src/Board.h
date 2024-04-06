@@ -69,13 +69,14 @@ public:
     void clearHistorySize();
 
     static const int MAX_TEST_COLUMN = 5;
-    bool LOAD_TRANSPOSITION_TABLE = false;
+    bool LOAD_TRANSPOSITION_TABLE = true;
     bool SAVE_TRANSPOSITION_TABLE = false;
 
     static constexpr int WIDTH = 7;
     static constexpr int HEIGHT = 6;
     static constexpr int MIN_SCORE = -(WIDTH * HEIGHT) / 2 + 3;
     static constexpr int MAX_SCORE =  (WIDTH * HEIGHT + 1) / 2 - 3;
+    static constexpr int WIN_LENGTH = 4; // Connect-WIN_LENGTH
 
 private:
     int directions[8][2] = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};

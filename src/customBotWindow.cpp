@@ -12,13 +12,6 @@ CustomBotWindow::~CustomBotWindow() {
 }
 
 void CustomBotWindow::on_firstBotCombo_currentIndexChanged(int index) {
-    if (index == 4) {
-        ui->secondBotCombo->removeItem(4);
-        ui->secondBotCombo->setCurrentIndex(0);
-    }
-    else if (ui->secondBotCombo->count() == 4) {
-        ui->secondBotCombo->addItem("Perfect Bot");
-    }
     if (index == 0) {
         ui->secondBotCombo->setEnabled(false);
         ui->secondBotCombo->setCurrentIndex(0);

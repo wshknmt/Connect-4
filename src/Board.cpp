@@ -107,7 +107,7 @@ bool Board::checkWin(int col, int row, int token) {
         winCounter = 1;
         checkDirection(col + directions[i][0], row + directions[i][1], i, token);
         checkDirection(col + directions[(i + 4) % 8][0], row + directions[(i + 4) % 8][1], (i + 4) % 8, token);
-        if (winCounter >= 4) return true;
+        if (winCounter >= WIN_LENGTH) return true;
     }
     return false;
 }

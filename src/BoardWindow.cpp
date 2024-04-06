@@ -42,8 +42,6 @@ BoardWindow::BoardWindow(QWidget *parent)
     disableButtons();
     resetWindow();
 
-    if (Board::getInstance()->LOAD_TRANSPOSITION_TABLE)
-        Board::getInstance()->loadTranspositionTableFromFile();
 }
 
 void BoardWindow::connectSignalsAndSlotsForColumnButtons() {
@@ -100,7 +98,7 @@ void BoardWindow::onColumnButtonClicked(QPushButton* columnButton, int columnInd
     playerTurnLabel();
     ui->undoButton->setEnabled(true);
 
-    // std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+    std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
     // Board::getInstance()->printTotalHashTime();
     // Board::getInstance()->printTotalSearchTime();
 }
@@ -137,9 +135,8 @@ bool BoardWindow::checkWinOnBoard(int columnIndex) {
 }
 
 bool BoardWindow::checkDrawOnBoard() {
-    if (Board::getInstance()->checkDraw()) {
+    if (Board::getInstance()->checkDraw() && !endOfGame) {
         ui->resultLabel->setText("Draw!!!");
-        endOfGame = true;
         return true;
     }
     return false;
@@ -150,8 +147,11 @@ bool BoardWindow::playerTurn(int columnIndex) {
     Board::getInstance()->addElementToMovesHistory(columnIndex);
     disableButtons();
     refreshWindow();
-    if(checkWinOnBoard(columnIndex) || checkDrawOnBoard())
+    if(checkWinOnBoard(columnIndex) || checkDrawOnBoard()) {
+        endOfGame = true;
         return false;
+    }
+
     Board::getInstance()->changePlayerToMove();
     return true;
 }
@@ -161,7 +161,10 @@ bool BoardWindow::botTurn() {
     int botMove = Bot::getInstance()->botTurn();
     Board::getInstance()->addElementToMovesHistory(botMove);
     if(checkWinOnBoard(botMove) || checkDrawOnBoard()) {
-        if (checkDrawOnBoard()) refreshWindow();
+        if (checkDrawOnBoard()) {
+            endOfGame = true;
+            refreshWindow();
+        }
         return false;
     }
     if (gameMode != 2) playerTurnLabel();
@@ -183,6 +186,7 @@ void BoardWindow::botThinkingLabel() {
 }
 
 void BoardWindow::startCvCGame() {
+    disableButtons();
     ui->undoButton->setEnabled(false);
     gameTimer = new QTimer(this);
     connect(gameTimer, &QTimer::timeout, this, &BoardWindow::makeBotMove);
@@ -210,6 +214,7 @@ void BoardWindow::stopTimer() {
         timer->stop();
         timer->deleteLater();
     }
+    refreshWindow();
 }
 
 void BoardWindow::changeBot() {
@@ -317,7 +322,15 @@ void BoardWindow::setGameMode(int gameMode, bool playerStart, int firstBot, int 
     }
 
     if (gameMode != 2) playerTurnLabel();
+    if (Board::getInstance()->LOAD_TRANSPOSITION_TABLE && perfectBotInUse() )
+        Board::getInstance()->loadTranspositionTableFromFile();
 }
+
+bool BoardWindow::perfectBotInUse() {
+    if (firstBot == 4 || secondBot == 4) return true;
+    else return false;
+}
+
 void BoardWindow::on_exportButton_clicked() {
     std::filesystem::path currentPath = std::filesystem::current_path();
     std::filesystem::path targetPath = currentPath.parent_path().parent_path().parent_path();

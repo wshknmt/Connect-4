@@ -53,6 +53,7 @@ private:
     bool checkDrawOnBoard();
     void playerTurnLabel();
     void botThinkingLabel();
+    bool perfectBotInUse();
 
     bool endOfGame = false;
     Ui::BoardWindow *ui;

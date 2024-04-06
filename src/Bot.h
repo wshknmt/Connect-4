@@ -29,6 +29,7 @@ public:
     int getHeuristicMove();
     void printCheckedColumns();
     void columnInfo(int i, int score);
+    int getRandomizeColumn(int maxScore, std::vector<std::pair<int, int>> scoreColumns);
 
     std::pair<int, int> getHeuristicMinMaxMove(int depth, bool maximizingPlayer);
     std::pair<int, int> evaluateHeuristicMinMax();
@@ -41,7 +42,9 @@ private:
     int searchDepth = 0;
     int printNum = 1;
     std::vector<std::pair<int, int>> checkedColumns;
+    std::vector<std::pair<int, int>> scoreColumns;
     bool useTT = true;
+    std::mt19937 generator;
 };
 
 #endif // BOT_H

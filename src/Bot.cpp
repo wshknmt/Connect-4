@@ -4,7 +4,8 @@ Bot* Bot::pInstance = nullptr;
 
 Bot::Bot()
 {
-
+    std::random_device rd;
+    generator = std::mt19937(rd());
 }
 
 int Bot::botTurn() {
@@ -41,6 +42,7 @@ void Bot::undoPlay(int column) {
 
 int Bot::getMove() {
     std::pair<int, int> result;
+    int col;
     switch(getMode()) {
     case 1:
         return getRandomMove();
@@ -49,7 +51,7 @@ int Bot::getMove() {
         return getHeuristicMove();
         break;
     case 3:
-        result = getHeuristicMinMaxMove(6, true);
+        result = getHeuristicMinMaxMove(3, true);
         return result.second;
         break;
     case 4:
@@ -64,9 +66,7 @@ int Bot::getMove() {
 }
 
 int Bot::getRandomMove() {
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_int_distribution<int> distribution(0, 6);
+    std::uniform_int_distribution<int> distribution(0, Board::MAX_TEST_COLUMN - 1);
     int val = distribution(generator);
     if (Board::getInstance()->isColumnFree(val))
         return val;
@@ -138,7 +138,7 @@ std::pair<int, int> Bot::getMinMaxMove(int alpha, int beta) {
             play(Board::getInstance()->getColumnOrder(i));
             std::pair<int, int> newScoreAndColumn = getMinMaxMove(-beta, -alpha);
             newScoreAndColumn.first *= -1;
-            
+
             if ( newScoreAndColumn.first >= beta) {
                 if (Board::getInstance()->getMovesCounter() <= MAX_TOKENS_TO_HASH_IN_TABLE && useTT) {
                     PairInt64 curHash = Board::getInstance()->hashCurrentPosition();
@@ -170,7 +170,7 @@ std::pair<int, int> Bot::getMinMaxMove(int alpha, int beta) {
 void Bot::columnInfo(int i, int score) {
     if (searchDepth == 1) {
         std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
-        checkedColumns.push_back(std::make_pair(Board::getInstance()->getColumnOrder(i), score));
+        checkedColumns.push_back(std::make_pair(score, Board::getInstance()->getColumnOrder(i)));
     }
 }
 
@@ -187,9 +187,26 @@ void Bot::resetBot() {
     mode = 0;
 }
 
+int Bot::getRandomizeColumn(int maxScore, std::vector<std::pair<int, int>> scoreColumns) {
+    std::vector<std::pair<int, int>> goodColumns;
+    for (const auto& pair : scoreColumns) {
+        if (pair.first == maxScore) {
+            goodColumns.push_back(pair);
+        }
+    }
+    if (goodColumns.size() > 1) {
+        std::uniform_int_distribution<int> distribution(0, goodColumns.size() - 1);
+        int val = distribution(generator);
+        return goodColumns[val].second;
+    }
+    else
+        return goodColumns[0].second;
+}
+
 int Bot::getHeuristicMove() {
     int bestScore = INT_MIN;
     int bestIndex = 0;
+    std::vector<std::pair<int, int>> scoreColumns;
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
         if (Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i))) {
             play(Board::getInstance()->getColumnOrder(i));
@@ -200,6 +217,7 @@ int Bot::getHeuristicMove() {
             Board::getInstance()->changePlayerToMove();
             playerScore = playerScore * 2 / 3;
             int score = playerScore - opponentScore;
+            scoreColumns.push_back(std::make_pair(score, i));
             if (score > bestScore) {
                 bestScore = score;
                 bestIndex = i;
@@ -209,14 +227,15 @@ int Bot::getHeuristicMove() {
         }
     }
 
-    return Board::getInstance()->getColumnOrder(bestIndex);
+    int col = getRandomizeColumn(bestScore, scoreColumns);
+    return Board::getInstance()->getColumnOrder(col);
 }
 
 std::pair<int, int> Bot::getHeuristicMinMaxMove(int depth, bool maximizingPlayer) {
     if (depth == 0 || Board::getInstance()->checkDraw()) {
         return evaluateHeuristicMinMax();
     }
-
+    std::vector<std::pair<int, int>> scoreColumns;
     if (maximizingPlayer) {
         int bestValue = INT_MIN;
         int bestIndex = -1;
@@ -233,13 +252,15 @@ std::pair<int, int> Bot::getHeuristicMinMaxMove(int depth, bool maximizingPlayer
                 }
                 undoPlay(Board::getInstance()->getColumnOrder(i));
 
+                scoreColumns.push_back(std::make_pair(value.first, Board::getInstance()->getColumnOrder(i)));
                 if (value.first > bestValue) {
                     bestValue = value.first;
                     bestIndex = Board::getInstance()->getColumnOrder(i);
                 }
             }
         }
-        return std::make_pair(bestValue, bestIndex);
+        int col = getRandomizeColumn(bestValue, scoreColumns);
+        return std::make_pair(bestValue, col);
     } else {
         int bestValue = INT_MAX;
         int bestIndex = -1;
@@ -255,13 +276,15 @@ std::pair<int, int> Bot::getHeuristicMinMaxMove(int depth, bool maximizingPlayer
                     value = getHeuristicMinMaxMove(depth - 1, true);
                 }
                 undoPlay(Board::getInstance()->getColumnOrder(i));
+                scoreColumns.push_back(std::make_pair(value.first, Board::getInstance()->getColumnOrder(i)));
                 if (value.first < bestValue) {
                     bestValue = value.first;
                     bestIndex = Board::getInstance()->getColumnOrder(i);
                 }
             }
         }
-        return std::make_pair(bestValue, bestIndex);
+        int col = getRandomizeColumn(bestValue, scoreColumns);
+        return std::make_pair(bestValue, col);
     }
 }
 
@@ -281,6 +304,6 @@ void Bot::printCheckedColumns() {
         std::cout << printNum++ << std::endl;
     std::sort(checkedColumns.begin(), checkedColumns.end(), comparePairInts);
     for (const auto& pair : checkedColumns)
-        std::cout << "Column: " << pair.first << ", Score: " << pair.second << std::endl;
+        std::cout << "Column: " << pair.second << ", Score: " << pair.first << std::endl;
     checkedColumns.clear();
 }
