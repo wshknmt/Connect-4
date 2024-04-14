@@ -184,10 +184,10 @@ PairInt64 Board::hashCurrentPosition() {
         for (unsigned int j = 0; j < MAX_TEST_COLUMN; j++) {
         // for (unsigned int j = 0; j < WIDTH; j++) {
             if (fields[i][j] == 1) {
-                boardOccupancy |= (1ULL << (i * 7 + j) );
-                boardColor     |= (1ULL << (i * 7 + j) );
+                boardOccupancy |= (1ULL << (i * WIDTH + j) );
+                boardColor     |= (1ULL << (i * WIDTH + j) );
             } else if (fields[i][j] == 2) {
-                boardOccupancy |= (1ULL << (i * 7 + j) );
+                boardOccupancy |= (1ULL << (i * WIDTH + j) );
             }
         }
     }

@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QFileDialog>
+#include <QShortcut>
 #include <filesystem>
 #include "Board.h"
 #include "Bot.h"
@@ -46,6 +47,7 @@ private slots:
     void on_newGameButton_clicked();
     void on_undoButton_clicked();
     void on_exportButton_clicked();
+    void on_changePlayer();
 
 private:
     void onColumnButtonClicked(QPushButton* columnButton, int columnIndex);

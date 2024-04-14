@@ -43,6 +43,9 @@ BoardWindow::BoardWindow(QWidget *parent)
     disableButtons();
     resetWindow();
 
+    QShortcut *shortcut = new QShortcut(QKeySequence("C"), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(on_changePlayer()));
+
 }
 
 void BoardWindow::connectSignalsAndSlotsForColumnButtons() {
@@ -377,3 +380,14 @@ void BoardWindow::on_exportButton_clicked() {
     }
 }
 
+void BoardWindow::on_changePlayer() {
+    playerStart = !playerStart;
+    on_newGameButton_clicked();
+    if (playerStart) {
+        ui->redLabel->setText("Player");
+        ui->blueLabel->setText("Bot");
+    } else {
+        ui->redLabel->setText("Bot");
+        ui->blueLabel->setText("Player");
+    }
+}
