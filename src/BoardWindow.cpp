@@ -18,8 +18,9 @@ BoardWindow::BoardWindow(QWidget *parent)
     int shiftW = (width()-80)/Board::getInstance()->getWidth();
     int shiftH = (height()-150)/Board::getInstance()->getHeight();
 
-    for(int i =0; i<Board::getInstance()->getWidth(); i++) {
+    for(int i = 0; i < Board::getInstance()->getWidth(); i++) {
         std::vector <QGraphicsEllipseItem*> rectV;
+        if (i == Board::MAX_TEST_COLUMN) pen.setColor(Qt::white);
         for(int j = 0; j < Board::getInstance()->getHeight(); j++) {
             QGraphicsEllipseItem *newEllipse = scene->addEllipse( i*shiftW, j*shiftH, 60, 60, pen, QBrush(Qt::white) );
             rectV.push_back(newEllipse);
@@ -256,6 +257,7 @@ void BoardWindow::on_newGameButton_clicked() {
     loaded = false;
     resetWindow();
     refreshWindow();
+    Bot::getInstance()->resetPoints();
     switch(gameMode) {
     case 1:
         if (!playerStart) {
@@ -275,16 +277,18 @@ void BoardWindow::on_undoButton_clicked() {
     case 0:
         Board::getInstance()->changePlayerToMove();
         Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->popBackMovesHistory());
+        enableNotFullColumns();
         break;
     case 1:
         Board::getInstance()->changePlayerToMove();
         Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->popBackMovesHistory());
         Board::getInstance()->changePlayerToMove();
         Board::getInstance()->removeLastTokenFromColumn(Board::getInstance()->popBackMovesHistory());
+        enableNotFullColumns();
         break;
     }
 
-    if (Board::getInstance()->movesHistorySize() == 0) ui->undoButton->setEnabled(false);
+    if (Board::getInstance()->movesHistorySize() <= 1) ui->undoButton->setEnabled(false);
 
     refreshWindow();
 }

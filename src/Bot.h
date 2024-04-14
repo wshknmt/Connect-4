@@ -30,11 +30,12 @@ public:
     void printCheckedColumns();
     void columnInfo(int i, int score);
     int getRandomizeColumn(int maxScore, std::vector<std::pair<int, int>> scoreColumns);
+    void resetPoints();
 
     std::pair<int, int> getHeuristicMinMaxMove(int depth, bool maximizingPlayer);
     std::pair<int, int> evaluateHeuristicMinMax();
 
-    static const int MAX_TOKENS_TO_HASH_IN_TABLE = 34;
+    static const int MAX_TOKENS_TO_HASH_IN_TABLE = 50;
 
 private:
     static Bot* pInstance;
@@ -45,6 +46,7 @@ private:
     std::vector<std::pair<int, int>> scoreColumns;
     bool useTT = true;
     std::mt19937 generator;
+    int pointSum = 0;
 };
 
 #endif // BOT_H

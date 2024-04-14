@@ -5,6 +5,8 @@ CustomBotWindow::CustomBotWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CustomBotWindow) {
     ui->setupUi(this);
+    QShortcut *shortcut = new QShortcut(QKeySequence("P"), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(on_actionTwo_perfect_bots_triggered()));
 }
 
 CustomBotWindow::~CustomBotWindow() {
@@ -33,3 +35,11 @@ void CustomBotWindow::on_startButton_clicked() {
     this->hide();
     bw->startCvCGame();
 }
+void CustomBotWindow::on_actionTwo_perfect_bots_triggered() {
+    BoardWindow *bw = new BoardWindow();
+    bw->setGameMode(2, true, 4, 4, false);
+    bw->show();
+    this->hide();
+    bw->startCvCGame();
+}
+

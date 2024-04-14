@@ -517,3 +517,11 @@ int Board::movesHistorySize() {
 void Board::clearHistorySize() {
     movesHistory.clear();
 }
+
+int Board::getFreeColumn() {
+    std::cout<<"bad column index"<<std::endl;
+    for (int i = 0; i < MAX_TEST_COLUMN; i++) {
+        if( isColumnFree(getColumnOrder(i)) )
+            return getColumnOrder(i);
+    }
+}

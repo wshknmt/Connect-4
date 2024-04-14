@@ -6,6 +6,8 @@ MainMenuWindow::MainMenuWindow(QWidget *parent) :
     ui(new Ui::MainMenuWindow)
 {
     ui->setupUi(this);
+    QShortcut *shortcut = new QShortcut(QKeySequence("P"), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(on_startButtonCvC_clicked()));
 }
 
 MainMenuWindow::~MainMenuWindow() {

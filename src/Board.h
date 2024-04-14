@@ -67,6 +67,7 @@ public:
     int popBackMovesHistory();
     int movesHistorySize();
     void clearHistorySize();
+    int getFreeColumn();
 
     static const int MAX_TEST_COLUMN = 5;
     bool LOAD_TRANSPOSITION_TABLE = true;

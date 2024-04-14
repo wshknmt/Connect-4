@@ -18,7 +18,13 @@ void ChooseBotWindow::openBoardWindow(int bot) {
     bw->setGameMode(1, ui->playerRadio->isChecked(), bot, 0, false);
     bw->show();
     this->hide();
-    if (!ui->playerRadio->isChecked()) bw->botTurn();
+    if (!ui->playerRadio->isChecked()) {
+        auto start = std::chrono::high_resolution_clock::now();
+        bw->botTurn();
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+        std::cout << "Time taken: " << duration.count() << " seconds" << std::endl;
+    }
 }
 
 void ChooseBotWindow::on_startButtonPvCRand_clicked() {

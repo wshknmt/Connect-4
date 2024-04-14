@@ -12,6 +12,7 @@ int Bot::botTurn() {
 
     int column = getMove();
     wait();
+    if (column < 0) column = Board::getInstance()->getFreeColumn();
     Board::getInstance()->dropTokenToColumn(column, Board::getInstance()->getPlayerToMove());
     return column;
 }
@@ -206,6 +207,7 @@ int Bot::getRandomizeColumn(int maxScore, std::vector<std::pair<int, int>> score
 int Bot::getHeuristicMove() {
     int bestScore = INT_MIN;
     int bestIndex = 0;
+    int bestOldScore = 0;
     std::vector<std::pair<int, int>> scoreColumns;
     for (int i = 0; i < Board::MAX_TEST_COLUMN; i++) {
         if (Board::getInstance()->isColumnFree(Board::getInstance()->getColumnOrder(i))) {
@@ -215,20 +217,27 @@ int Bot::getHeuristicMove() {
             Board::getInstance()->changePlayerToMove();
             int playerScore = Board::getInstance()->getPointResult(Board::getInstance()->getPlayerToMove());
             Board::getInstance()->changePlayerToMove();
+            int oldScore = playerScore - opponentScore;
             playerScore = playerScore * 2 / 3;
             int score = playerScore - opponentScore;
             scoreColumns.push_back(std::make_pair(score, i));
             if (score > bestScore) {
                 bestScore = score;
                 bestIndex = i;
+                bestOldScore = oldScore;
             }
             undoPlay(Board::getInstance()->getColumnOrder(i));
             std::cout<<"column num: "<< Board::getInstance()->getColumnOrder(i) << " Pscore: "<<playerScore<<" OScore " <<opponentScore<<" finScore: "<<score<<std::endl;
         }
     }
-
+    pointSum += bestOldScore;
+    std::cout<<"point sum: "<<pointSum<<std::endl;
     int col = getRandomizeColumn(bestScore, scoreColumns);
     return Board::getInstance()->getColumnOrder(col);
+}
+
+void Bot::resetPoints() {
+    pointSum = 0;
 }
 
 std::pair<int, int> Bot::getHeuristicMinMaxMove(int depth, bool maximizingPlayer) {
@@ -296,7 +305,7 @@ std::pair<int, int> Bot::evaluateHeuristicMinMax() {
 }
 
 bool comparePairInts(const std::pair<int, int>& a, const std::pair<int, int>& b) {
-    return a.first < b.first;
+    return a.second < b.second;
 }
 
 void Bot::printCheckedColumns() {
@@ -304,6 +313,6 @@ void Bot::printCheckedColumns() {
         std::cout << printNum++ << std::endl;
     std::sort(checkedColumns.begin(), checkedColumns.end(), comparePairInts);
     for (const auto& pair : checkedColumns)
-        std::cout << "Column: " << pair.second << ", Score: " << pair.first << std::endl;
+        std::cout << "Column: " << pair.second + 1 << ", Score: " << pair.first << std::endl;
     checkedColumns.clear();
 }

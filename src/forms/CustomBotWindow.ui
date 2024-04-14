@@ -203,7 +203,7 @@ QComboBox::drop-down {
 }
 QComboBox:disabled {
     background-color: darkgreen;
-    color: #ccc; 
+    color: #ccc;
 }</string>
              </property>
              <item>
@@ -289,7 +289,7 @@ QPushButton:pressed {
 }
 QPushButton:disabled {
     background-color: darkgreen;
-    color: #ccc; 
+    color: #ccc;
 }</string>
        </property>
        <property name="text">
@@ -299,16 +299,6 @@ QPushButton:disabled {
      </item>
     </layout>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>21</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
