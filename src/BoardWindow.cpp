@@ -15,7 +15,7 @@ BoardWindow::BoardWindow(QWidget *parent)
     ui->graphicsView->setScene(scene);
     QBrush image;
     QPen pen;
-    int shiftW = (width()-80)/Board::getInstance()->getWidth();
+    int shiftW = (width()-20)/Board::getInstance()->getWidth();
     int shiftH = (height()-150)/Board::getInstance()->getHeight();
 
     for(int i = 0; i < Board::getInstance()->getWidth(); i++) {
@@ -35,8 +35,10 @@ BoardWindow::BoardWindow(QWidget *parent)
     listOfButtons[4] = ui->column4Button;
     listOfButtons[5] = ui->column5Button;
     listOfButtons[6] = ui->column6Button;
+    listOfButtons[7] = ui->column7Button;
+    listOfButtons[8] = ui->column8Button;
 
-    for(int i = 0; i < 7; i++) {
+    for(int i = 0; i < 9; i++) {
         listOfButtons[i]->setStyleSheet("QPushButton { background-color: rgba(1, 255, 255, 0); }" "QPushButton:hover { background-color: rgba(250, 250, 250, 100); }");
     }
 
@@ -56,7 +58,9 @@ void BoardWindow::connectSignalsAndSlotsForColumnButtons() {
         ui->column3Button,
         ui->column4Button,
         ui->column5Button,
-        ui->column6Button
+        ui->column6Button,
+        ui->column7Button,
+        ui->column8Button
     };
 
     for (int i = 0; i < columnButtons.size(); ++i) {
@@ -233,7 +237,7 @@ void BoardWindow::on_exitButton_clicked() {
 }
 
 void BoardWindow::disableButtons() {
-    for(int i = 0; i < 7; i++) {
+    for(int i = 0; i < 9; i++) {
         listOfButtons[i]->setEnabled(false);
     }
 }

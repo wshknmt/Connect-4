@@ -169,8 +169,10 @@ std::pair<int, int> Bot::getMinMaxMove(int alpha, int beta) {
 }
 
 void Bot::columnInfo(int i, int score) {
-    if (searchDepth == 1) {
-        std::cout<<"checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
+    if (searchDepth == 2) {
+        std::cout<<"2.checked: "<<(100.0*(i+1)/Board::MAX_TEST_COLUMN/Board::MAX_TEST_COLUMN + 100.0*(i+1)/Board::MAX_TEST_COLUMN)*7.0/8<<" % column"<<std::endl;
+    } else if (searchDepth == 1) {
+        std::cout<<"1.checked: "<<100.0*(i+1)/Board::MAX_TEST_COLUMN<<" % column"<<std::endl;
         checkedColumns.push_back(std::make_pair(score, Board::getInstance()->getColumnOrder(i)));
     }
 }

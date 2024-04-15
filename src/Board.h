@@ -69,12 +69,12 @@ public:
     void clearHistorySize();
     int getFreeColumn();
 
-    static const int MAX_TEST_COLUMN = 7;
+    static const int MAX_TEST_COLUMN = 9;
     bool LOAD_TRANSPOSITION_TABLE = false;
-    bool SAVE_TRANSPOSITION_TABLE = false;
+    bool SAVE_TRANSPOSITION_TABLE = true;
 
-    static constexpr int WIDTH = 7;
-    static constexpr int HEIGHT = 6;
+    static constexpr int WIDTH = 9;
+    static constexpr int HEIGHT = 4;
     static constexpr int MIN_SCORE = -(WIDTH * HEIGHT) / 2 + 3;
     static constexpr int MAX_SCORE =  (WIDTH * HEIGHT + 1) / 2 - 3;
     static constexpr int WIN_LENGTH = 4; // Connect-WIN_LENGTH

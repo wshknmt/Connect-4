@@ -61,7 +61,7 @@ private:
     Ui::BoardWindow *ui;
     QGraphicsScene *scene;
     std::vector<std::vector<QGraphicsEllipseItem*>> qtBoard;
-    QPushButton *listOfButtons[7];
+    QPushButton *listOfButtons[9];
     int gameMode; // 0 - PvP, 1 - PvC, 2 - Cvc
     bool playerStart;
     int firstBot, secondBot; // 0 - undefined, 1 - random, 2 - naive heur., 3 - minmax heur., 4 - perfect
